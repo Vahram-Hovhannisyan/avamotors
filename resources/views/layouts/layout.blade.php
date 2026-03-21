@@ -91,6 +91,9 @@
                     @if(!auth()->user()->hasVerifiedEmail())
                         <span class="unverified-dot" title="E-mail не подтверждён"></span>
                     @endif
+                    @if(!auth()->user()->city || !auth()->user()->address)
+                        <span class="delivery-dot" title="В профиле запольните адрес доставки"></span>
+                    @endif
                     <button class="icon-btn" onclick="this.parentElement.classList.toggle('open')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
@@ -106,6 +109,12 @@
                                 <span class="email-verified-badge">✓</span>
                             @else
                                 <span class="email-unverified-badge">!</span>
+                            @endif
+
+                            @if(auth()->user()->city && auth()->user()->address)
+                                {{ auth()->user()->city, auth()->user()->address }}
+                            @else
+                                Нету адреса доставки <span class="delivery-unverified-badge">!</span>
                             @endif
                         </div>
                         <div class="user-dropdown-divider"></div>

@@ -90,6 +90,12 @@
 .email-status.verified  { background:rgba(72,187,120,.12); color:#48bb78; border:1px solid rgba(72,187,120,.3); }
 .email-status.unverified { background:rgba(237,137,54,.12); color:#ed8936; border:1px solid rgba(237,137,54,.3); }
 
+/* ── Delivery status ── */
+.delivery-status           { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.7rem; letter-spacing:0.05em; text-transform:uppercase; margin-top:0.6rem; padding:0.25rem 0.6rem; }
+.delivery-status svg       { width:12px; height:12px; flex-shrink:0; }
+.delivery-status.unverified { background:rgba(237,137,54,.12); color: #ed364b; border:1px solid rgba(237, 54, 75, 0.2); }
+
+
 /* ── Verify banner (profile page) ── */
 .verify-banner          { display:flex; align-items:center; justify-content:space-between; gap:1rem; background:rgba(237,137,54,.08); border:1px solid rgba(237,137,54,.3); border-left:3px solid #ed8936; padding:0.85rem 1.2rem; margin-bottom:1.2rem; flex-wrap:wrap; }
 .verify-banner-text     { display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:var(--ink); }

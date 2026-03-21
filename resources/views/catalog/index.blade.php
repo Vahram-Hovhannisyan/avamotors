@@ -11,9 +11,7 @@
     <x-flash-message />
 
     <div class="catalog-wrap">
-        <button class="sidebar-toggle" onclick="this.nextElementSibling.classList.toggle('open')">
-            Фильтры и категории <span>▼</span>
-        </button>
+
         {{-- ── SIDEBAR ── --}}
         <aside class="sidebar">
 
@@ -77,28 +75,67 @@
                         @if(request('q'))    <input type="hidden" name="q"    value="{{ request('q') }}"> @endif
                         @if(request('sort')) <input type="hidden" name="sort" value="{{ request('sort') }}"> @endif
 
-                        <span class="filter-label">Марка</span>
-                        <select name="make" class="filter-select" id="make-select">
-                            <option value="">— Все марки —</option>
-                            @foreach($carMakes as $make)
-                                <option value="{{ $make->id }}" {{ request('make') == $make->id ? 'selected' : '' }}>
-                                    {{ $make->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        {{-- Hidden inputs for form submit --}}
+                        <input type="hidden" name="make"  id="make-value"  value="{{ request('make') }}">
+                        <input type="hidden" name="model" id="model-value" value="{{ request('model') }}">
 
+                        {{-- Make dropdown --}}
+                        <span class="filter-label">Марка</span>
+                        <div class="custom-select" id="make-dropdown">
+                            <div class="custom-select-trigger" id="make-trigger">
+                                <span id="make-display">
+                                    @php $selectedMake = $carMakes->firstWhere('id', request('make')); @endphp
+                                    {{ $selectedMake ? $selectedMake->name : '— Все марки —' }}
+                                </span>
+                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" width="10" height="10"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
+                            </div>
+                            <div class="custom-select-dropdown">
+                                <input type="text" class="custom-select-search" placeholder="Поиск марки...">
+                                <div class="custom-select-options">
+                                    <div class="custom-select-option {{ !request('make') ? 'active' : '' }}" data-value="">— Все марки —</div>
+                                    @foreach($carMakes as $make)
+                                        <div class="custom-select-option {{ request('make') == $make->id ? 'active' : '' }}"
+                                             data-value="{{ $make->id }}">{{ $make->name }}</div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Model dropdown --}}
                         <span class="filter-label">Модель</span>
-                        <select name="model" class="filter-select" id="model-select">
-                            <option value="">— Все модели —</option>
-                            @foreach($carMakes as $make)
-                                @foreach($make->carModels as $model)
-                                    <option value="{{ $model->id }}" data-make="{{ $make->id }}"
-                                        {{ request('model') == $model->id ? 'selected' : '' }}>
-                                        {{ $make->name }} {{ $model->name }}
-                                    </option>
-                                @endforeach
-                            @endforeach
-                        </select>
+                        <div class="custom-select" id="model-dropdown">
+                            <div class="custom-select-trigger" id="model-trigger">
+                                <span id="model-display">
+                                    @php
+                                        $selectedModel = null;
+                                        if(request('model')) {
+                                            foreach($carMakes as $mk) {
+                                                $found = $mk->carModels->firstWhere('id', request('model'));
+                                                if($found) { $selectedModel = $mk->name . ' ' . $found->name; break; }
+                                            }
+                                        }
+                                    @endphp
+                                    {{ $selectedModel ?? '— Все модели —' }}
+                                </span>
+                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" width="10" height="10"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
+                            </div>
+                            <div class="custom-select-dropdown">
+                                <input type="text" class="custom-select-search" placeholder="Поиск модели...">
+                                <div class="custom-select-options" id="model-options">
+                                    <div class="custom-select-option {{ !request('model') ? 'active' : '' }}" data-value="">— Все модели —</div>
+                                    @foreach($carMakes as $make)
+                                        @foreach($make->carModels as $model)
+                                            <div class="custom-select-option {{ request('model') == $model->id ? 'active' : '' }}"
+                                                 data-value="{{ $model->id }}"
+                                                 data-make="{{ $make->id }}"
+                                                 data-label="{{ $make->name }} {{ $model->name }}">
+                                                {{ $model->name }}
+                                            </div>
+                                        @endforeach
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
 
                         <button type="submit" class="filter-btn">Применить</button>
 

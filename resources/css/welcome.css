@@ -118,8 +118,8 @@
 }
 
 @keyframes floatPart {
-    0%, 100% { transform: translate(-49%, -49%) rotate(1deg); }
-    50%       { transform: translate(-49%, -56%) rotate(3deg); }
+    0%, 100% { transform: translate(-49%, -49%) rotate(4deg); }
+    50%       { transform: translate(-49%, -52%) rotate(6deg); }
 }
 
 /* ── SVG сеть брендов ── */

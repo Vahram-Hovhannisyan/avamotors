@@ -33,6 +33,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ── Счётчик выбранных моделей (badge) ──
+    function updateMakeCounter(group) {
+        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+        const total      = checkboxes.length;
+        const checked    = Array.from(checkboxes).filter(cb => cb.checked).length;
+
+        const counter = group.querySelector('.make-counter');
+        if (counter) {
+            counter.textContent = checked > 0 ? `${checked}/${total}` : total;
+            counter.classList.toggle('has-checked', checked > 0);
+        }
+
+        const trigger = group.querySelector('.make-accordion-trigger');
+        if (trigger) {
+            const makeId = trigger.dataset.target?.replace('make-edit-', '').replace('make-', '');
+            const badge  = document.getElementById('badge-edit-' + makeId)
+                || document.getElementById('badge-' + makeId);
+            if (badge) {
+                badge.textContent = checked;
+                badge.style.display = checked > 0 ? '' : 'none';
+            }
+            trigger.classList.toggle('has-selected', checked > 0);
+        }
+    }
+
+    // ── Clear all selected models ──
+    const clearBtn = document.getElementById('clearAllModels');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            document.querySelectorAll('.make-group input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            document.querySelectorAll('.make-group').forEach(group => {
+                updateMakeCounter(group);
+            });
+        });
+    }
+
     // ── Car makes accordion ──
     document.querySelectorAll('.make-accordion-trigger').forEach(trigger => {
         trigger.addEventListener('click', (e) => {
@@ -103,33 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMakeCounter(group);
         });
     });
-
-    // Счётчик выбранных моделей (badge)
-    function updateMakeCounter(group) {
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
-        const total      = checkboxes.length;
-        const checked    = Array.from(checkboxes).filter(cb => cb.checked).length;
-
-        // Старый вариант (.make-counter)
-        const counter = group.querySelector('.make-counter');
-        if (counter) {
-            counter.textContent = checked > 0 ? `${checked}/${total}` : total;
-            counter.classList.toggle('has-checked', checked > 0);
-        }
-
-        // Новый вариант (.make-selected-badge)
-        const trigger = group.querySelector('.make-accordion-trigger');
-        if (trigger) {
-            const makeId = trigger.dataset.target?.replace('make-edit-', '').replace('make-', '');
-            const badge  = document.getElementById('badge-edit-' + makeId)
-                || document.getElementById('badge-' + makeId);
-            if (badge) {
-                badge.textContent = checked;
-                badge.style.display = checked > 0 ? '' : 'none';
-            }
-            trigger.classList.toggle('has-selected', checked > 0);
-        }
-    }
 
     document.querySelectorAll('.make-group').forEach(group => {
         group.querySelectorAll('input[type="checkbox"]').forEach(cb => {

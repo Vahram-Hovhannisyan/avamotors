@@ -230,3 +230,5 @@
 .car-search-wrap        { margin-bottom:0.8rem; }
 .car-search-input       { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--ink); font-family:var(--font-body); font-size:0.82rem; padding:0.5rem 0.8rem; outline:none; transition:border-color 0.2s; }
 .car-search-input:focus { border-color:var(--brand); }
+.clear-models-btn { font-size:0.65rem; color:var(--muted); background:none; border:1px solid var(--border); padding:0.15rem 0.6rem; cursor:pointer; margin-left:auto; transition:all 0.2s; }
+.clear-models-btn:hover { border-color:#e53e3e; color:#e53e3e; }

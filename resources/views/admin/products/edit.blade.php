@@ -78,7 +78,10 @@
                     </div>
 
                     <div class="form-card">
-                        <div class="form-card-title">Подходит для автомобилей</div>
+                        <div class="form-card-title">
+                            Подходит для автомобилей
+                            <button type="button" id="clearAllModels" class="clear-models-btn">Сбросить всё</button>
+                        </div>
                         <div class="cars-search-wrap">
                             <input type="text" id="carSearch" placeholder="Поиск марки или модели..." class="cars-search-input">
                             <span class="cars-selected-count" id="carsSelectedCount"></span>

@@ -45,14 +45,19 @@ class CarController extends Controller
 
     public function destroyMake(CarMake $carMake)
     {
-        if ($carMake->carModels()->exists()) {
-            return back()->withErrors(['error' => 'Нельзя удалить марку с моделями.']);
-        }
+        $name        = $carMake->name;
+        $modelsCount = $carMake->carModels()->count();
 
-        $name = $carMake->name;
+        // Удаляем все модели вместе с маркой
+        $carMake->carModels()->delete();
         $carMake->delete();
 
-        return back()->with('success', "Марка «{$name}» удалена.");
+        $message = "Марка «{$name}» удалена.";
+        if ($modelsCount > 0) {
+            $message .= " Также удалено моделей: {$modelsCount}.";
+        }
+
+        return back()->with('success', $message);
     }
 
     public function storeModel(Request $request)

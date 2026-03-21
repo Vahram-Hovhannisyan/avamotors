@@ -84,12 +84,39 @@
 .check-label input[type="checkbox"] { width:15px; height:15px; accent-color:var(--brand); cursor:pointer; padding:0; flex-shrink:0; }
 
 /* ── Car models accordion ── */
-.makes-accordion    { margin-top:0.4rem; }
-.make-group         { margin-bottom:0.8rem; }
-.make-name          { font-size:0.75rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink); margin-bottom:0.4rem; }
-.models-list        { display:flex; flex-direction:column; gap:0.3rem; padding-left:0.8rem; }
-.model-check        { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; color:var(--muted); cursor:pointer; }
-.model-check input[type="checkbox"] { width:14px; height:14px; accent-color:var(--brand); cursor:pointer; padding:0; flex-shrink:0; }
+.cars-search-wrap       { display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; }
+.cars-search-input      { flex:1; background:var(--surface2); border:1px solid var(--border); color:var(--ink); font-family:var(--font-body); font-size:0.85rem; padding:0.55rem 0.9rem; outline:none; transition:border-color 0.2s; }
+.cars-search-input:focus { border-color:var(--brand); }
+.cars-search-input::placeholder { color:var(--muted); }
+.cars-selected-count    { font-size:0.75rem; color:var(--brand); white-space:nowrap; font-weight:500; }
+
+.makes-accordion        { max-height:360px; overflow-y:auto; border:1px solid var(--border); }
+.makes-accordion::-webkit-scrollbar { width:3px; }
+.makes-accordion::-webkit-scrollbar-thumb { background:var(--border); }
+
+.make-group             { border-bottom:1px solid var(--border); }
+.make-group:last-child  { border-bottom:none; }
+
+.make-accordion-trigger { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 0.9rem; cursor:pointer; user-select:none; transition:background 0.15s; }
+.make-accordion-trigger:hover { background:var(--surface2); }
+.make-accordion-trigger.has-selected { background:rgba(10,27,72,.04); }
+
+.make-accordion-name    { flex:1; font-size:0.82rem; font-weight:500; color:var(--ink); }
+.make-accordion-meta    { display:flex; align-items:center; gap:0.5rem; }
+.make-model-count       { font-size:0.7rem; color:var(--muted); }
+.make-selected-badge    { background:var(--brand); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.4rem; border-radius:10px; min-width:18px; text-align:center; }
+
+.make-accordion-arrow   { width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--muted); transition:transform 0.2s; }
+.make-accordion-arrow svg { width:10px; height:10px; }
+.make-group.open .make-accordion-arrow { transform:rotate(180deg); color:var(--brand); }
+
+.models-list            { display:none; flex-wrap:wrap; gap:0.3rem; padding:0.6rem 0.9rem 0.8rem; background:var(--surface2); border-top:1px solid var(--border); }
+.models-list.open       { display:flex; }
+.make-group.open .models-list { display:flex; }
+.model-check            { display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; color:var(--ink); cursor:pointer; padding:0.2rem 0.5rem; border:1px solid var(--border); background:var(--surface); white-space:nowrap; transition:all 0.15s; }
+.model-check:hover      { border-color:var(--brand); color:var(--brand); }
+.model-check input[type="checkbox"] { width:12px; height:12px; accent-color:var(--brand); cursor:pointer; padding:0; flex-shrink:0; }
+.model-check:has(input:checked) { background:rgba(10,27,72,.06); border-color:var(--brand); color:var(--brand); }
 
 /* ── Image preview ── */
 .img-preview        { width:100%; aspect-ratio:1; background:var(--surface2); display:flex; align-items:center; justify-content:center; border:1px solid var(--border); overflow:hidden; margin-bottom:0.8rem; }
@@ -198,3 +225,8 @@
     .analogs-layout { grid-template-columns:1fr; }
     .page-layout    { grid-template-columns:1fr; }
 }
+
+/* ── Car makes accordion ── */
+.car-search-wrap        { margin-bottom:0.8rem; }
+.car-search-input       { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--ink); font-family:var(--font-body); font-size:0.82rem; padding:0.5rem 0.8rem; outline:none; transition:border-color 0.2s; }
+.car-search-input:focus { border-color:var(--brand); }

@@ -65,16 +65,49 @@
 
                 <div class="form-card">
                     <div class="form-card-title">Подходит для автомобилей</div>
-                    <div class="makes-accordion">
+
+                    {{-- Поиск по маркам --}}
+                    <div class="cars-search-wrap">
+                        <input type="text" id="carSearch"
+                               placeholder="Поиск марки или модели..."
+                               class="cars-search-input">
+                        <span class="cars-selected-count" id="carsSelectedCount"></span>
+                    </div>
+
+                    <div class="makes-accordion" id="makesAccordion">
                         @foreach($carMakes as $make)
-                            <div class="make-group">
-                                <div class="make-name">{{ $make->name }}</div>
-                                <div class="models-list">
+                            @php
+                                $selectedModels = collect(old('car_models', []))->map('intval');
+                                $hasSelected    = $make->carModels->contains(fn($m) => $selectedModels->contains($m->id));
+                            @endphp
+                            <div class="make-group" data-make="{{ strtolower($make->name) }}">
+                                <div class="make-accordion-trigger {{ $hasSelected ? 'has-selected' : '' }}"
+                                     data-target="make-{{ $make->id }}">
+                                    <span class="make-accordion-name">{{ $make->name }}</span>
+                                    <span class="make-accordion-meta">
+                                        <span class="make-model-count">{{ $make->carModels->count() }} мод.</span>
+                                        @if($hasSelected)
+                                            <span class="make-selected-badge" id="badge-{{ $make->id }}">
+                                                {{ $make->carModels->filter(fn($m) => $selectedModels->contains($m->id))->count() }}
+                                            </span>
+                                        @else
+                                            <span class="make-selected-badge" id="badge-{{ $make->id }}" style="display:none">0</span>
+                                        @endif
+                                    </span>
+                                    <span class="make-accordion-arrow">
+                                        <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
+                                    </span>
+                                </div>
+                                <div class="models-list {{ $hasSelected ? 'open' : '' }}" id="make-{{ $make->id }}">
                                     @foreach($make->carModels as $model)
-                                        <label class="model-check">
-                                            <input type="checkbox" name="car_models[]" value="{{ $model->id }}"
+                                        <label class="model-check"
+                                               data-model="{{ strtolower($model->name) }}">
+                                            <input type="checkbox"
+                                                   name="car_models[]"
+                                                   value="{{ $model->id }}"
+                                                   data-make-id="{{ $make->id }}"
                                                 {{ in_array($model->id, old('car_models', [])) ? 'checked' : '' }}>
-                                            {{ $make->name }} {{ $model->name }}
+                                            {{ $model->name }}
                                         </label>
                                     @endforeach
                                 </div>

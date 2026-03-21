@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bc43372e-0dc6-4917-8191-ab8e3e4d04d2" name="Avamotors" url="http://avamotors.lc">
+        <fileTransfer mountedRoot="C:\OSPanel\home\avamotors\public" accessType="MOUNT" port="0" />
+      </webServer>
+    </option>
+  </component>
+</project>

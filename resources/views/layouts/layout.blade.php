@@ -111,10 +111,10 @@
                                 <span class="email-unverified-badge">!</span>
                             @endif
 
-                            @if(auth()->user()->city && auth()->user()->address)
-                                {{ auth()->user()->city, auth()->user()->address }}
+                            @if(auth()->user()->city || auth()->user()->address)
+                                {{ auth()->user()->city }}, {{auth()->user()->address}}
                             @else
-                                Нету адреса доставки <span class="delivery-unverified-badge">!</span>
+                                Введите адрес или город доставки <span class="delivery-unverified-badge">!</span>
                             @endif
                         </div>
                         <div class="user-dropdown-divider"></div>

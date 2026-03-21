@@ -79,16 +79,34 @@
 
                     <div class="form-card">
                         <div class="form-card-title">Подходит для автомобилей</div>
+                        <div class="cars-search-wrap">
+                            <input type="text" id="carSearch" placeholder="Поиск марки или модели..." class="cars-search-input">
+                            <span class="cars-selected-count" id="carsSelectedCount"></span>
+                        </div>
                         <div class="makes-accordion">
                             @foreach($carMakes as $make)
-                                <div class="make-group">
-                                    <div class="make-name">{{ $make->name }}</div>
-                                    <div class="models-list">
+                                @php
+                                    $selectedCount = $make->carModels->filter(fn($m) =>
+                                        $product->carModels->contains($m->id) || in_array($m->id, old('car_models', []))
+                                    )->count();
+                                @endphp
+                                <div class="make-group {{ $selectedCount > 0 ? 'open' : '' }}" data-make="{{ strtolower($make->name) }}">
+                                    <div class="make-accordion-trigger {{ $selectedCount > 0 ? 'has-selected' : '' }}" data-target="make-edit-{{ $make->id }}">
+                                        <span class="make-accordion-name">{{ $make->name }}</span>
+                                        <span class="make-accordion-meta">
+                                            <span class="make-model-count">{{ $make->carModels->count() }} мод.</span>
+                                            <span class="make-selected-badge" id="badge-edit-{{ $make->id }}" {{ $selectedCount === 0 ? 'style="display:none"' : '' }}>{{ $selectedCount }}</span>
+                                        </span>
+                                        <span class="make-accordion-arrow">
+                                            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
+                                        </span>
+                                    </div>
+                                    <div class="models-list {{ $selectedCount > 0 ? 'open' : '' }}" id="make-edit-{{ $make->id }}">
                                         @foreach($make->carModels as $model)
-                                            <label class="model-check">
-                                                <input type="checkbox" name="car_models[]" value="{{ $model->id }}"
+                                            <label class="model-check" data-model="{{ strtolower($model->name) }}">
+                                                <input type="checkbox" name="car_models[]" value="{{ $model->id }}" data-make-id="{{ $make->id }}"
                                                     {{ $product->carModels->contains($model->id) || in_array($model->id, old('car_models', [])) ? 'checked' : '' }}>
-                                                {{ $make->name }} {{ $model->name }}
+                                                <span>{{ $model->name }}</span>
                                             </label>
                                         @endforeach
                                     </div>

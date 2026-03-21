@@ -15,11 +15,14 @@ class CarSeeder extends Seeder
                 'Camry', 'Corolla', 'RAV4', 'Land Cruiser', 'Land Cruiser Prado',
                 'Highlander', 'Yaris', 'Auris', 'Avensis', 'Hilux',
                 'FJ Cruiser', 'Fortuner', 'Rush', 'C-HR', 'Venza',
+                'Wish', 'Isis', 'Premio', 'Allion', 'Celica', 'Prius',
+                'Avalon', 'Sienna', 'Alphard', 'Supra', 'Sequoia', 'Tundra'
             ],
             'Lexus' => [
-                'IS 200', 'IS 250', 'IS 300', 'ES 250', 'ES 300', 'ES 350',
+                'IS 200', 'IS 250', 'IS 300', 'IS 350', 'ES 250', 'ES 300', 'ES 350',
                 'RX 300', 'RX 330', 'RX 350', 'GX 460', 'LX 470', 'LX 570',
-                'LS 400', 'LS 430', 'GS 300',
+                'LS 460', 'LS 400', 'LS 430', 'GS 300', 'GS 350', 'GS 400', 'GS 430',
+                'ES 330', 'SC 430', 'GS 350', 'GS 450h', 'LS 460', 'LS 600h'
             ],
             'Mercedes-Benz' => [
                 'C 180', 'C 200', 'C 220', 'C 250', 'C 300',
@@ -49,7 +52,11 @@ class CarSeeder extends Seeder
             'Nissan' => [
                 'Almera', 'Altima', 'Maxima', 'Pathfinder', 'X-Trail',
                 'Qashqai', 'Juke', 'Murano', 'Patrol', 'Navara',
-                'Note', 'Tiida', 'Teana',
+                'Note', 'Tiida', 'Teana', 'XTrail', 'Xterra', '350Z',
+                'Froniter', 'Elgrand', 'Quest'
+            ],
+            'Infinity' => [
+                'QX4', 'I35', 'G35', 'FX35', 'M35'
             ],
             'Hyundai' => [
                 'Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'ix35',

@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify', function () {
         return view('auth.emails.verify-email');
     })->name('verification.notice');
+
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
         return redirect()->route('home')->with('status', 'E-mail успешно подтверждён!');

@@ -25,7 +25,7 @@
     </div>
     <div class="body">
         <h2>Подтвердите ваш e-mail</h2>
-        @if($userName)
+        @if(!empty($userName ?? ''))
             <p>Здравствуйте, {{ $userName }}!</p>
         @endif
         <p>Спасибо за регистрацию на AVAMotors. Нажмите кнопку ниже чтобы подтвердить ваш e-mail адрес:</p>

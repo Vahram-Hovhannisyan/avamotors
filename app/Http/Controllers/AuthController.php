@@ -8,6 +8,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
@@ -74,18 +75,31 @@ class AuthController extends Controller
             'agree.accepted'     => 'Необходимо принять условия использования.',
         ]);
 
-        $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'phone'    => $data['phone'] ?? null,
-            'password' => Hash::make($data['password']),
-            'role'     => 'customer',
-        ]);
+        try {
+            $user = DB::transaction(function () use ($data) {
+                return User::create([
+                    'name'     => $data['name'],
+                    'email'    => $data['email'],
+                    'phone'    => $data['phone'] ?? null,
+                    'password' => Hash::make($data['password']),
+                    'role'     => 'customer',
+                ]);
+            });
 
-        Auth::login($user);
-        event(new Registered($user));
+            Auth::login($user);
+            event(new Registered($user));
 
-        return redirect()->route('verification.notice');
+        } catch (\Throwable $e) {
+            Auth::logout();
+            if (isset($user) && $user->exists) {
+                $user->delete();
+            }
+            return back()
+                ->withInput()
+                ->withErrors(['email' => 'Не удалось отправить письмо подтверждения. Проверьте e-mail адрес.']);
+        }
+
+        return redirect()->route('home');
     }
 
     // ═══════════════════════════════════════════════════

@@ -86,7 +86,7 @@
                           fill="white" font-family="sans-serif">BOSCH
                     </text>
                     <text x="360" y="370" text-anchor="start" font-size="10" font-weight="500" letter-spacing="1"
-                          fill="white" font-family="sans-serif">NGK
+                          fill="white" font-family="sans-serif">VALEO
                     </text>
                     <text x="230" y="430" text-anchor="middle" font-size="10" font-weight="500" letter-spacing="1"
                           fill="white" font-family="sans-serif">DENSO
@@ -95,7 +95,7 @@
                           fill="white" font-family="sans-serif">DELPHI
                     </text>
                     <text x="35" y="215" text-anchor="end" font-size="10" font-weight="500" letter-spacing="1"
-                          fill="white" font-family="sans-serif">VALEO
+                          fill="white" font-family="sans-serif">NGK
                     </text>
                     <text x="85" y="85" text-anchor="end" font-size="10" font-weight="500" letter-spacing="1"
                           fill="white" font-family="sans-serif">CHAMPION

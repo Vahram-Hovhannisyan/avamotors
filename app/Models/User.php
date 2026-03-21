@@ -14,7 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'password', 'role',
+        'name', 'email', 'phone', 'password', 'role', 'address', 'city'
     ];
 
     protected $hidden = [
@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $casts = [
-        'password'          => 'hashed',
+        'password' => 'hashed',
         'email_verified_at' => 'datetime',
     ];
 

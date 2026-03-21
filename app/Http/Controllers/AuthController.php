@@ -193,7 +193,7 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $user = User::find(Auth::id());
 
         $data = $request->validate([
             'name'    => ['required', 'string', 'max:100'],

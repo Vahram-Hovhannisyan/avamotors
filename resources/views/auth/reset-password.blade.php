@@ -29,14 +29,15 @@
             <form action="{{ route('password.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
+                <input type="hidden" name="email" value="{{ old('email', $email ?? '') }}">
 
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email"
-                           value="{{ old('email', $email ?? '') }}"
-                           placeholder="you@example.com"
-                           required>
-                    @error('email') <div class="form-error">{{ $message }}</div> @enderror
+                {{-- Email — только отображение, не редактируется --}}
+                <div class="reset-email-block">
+                    <div class="reset-email-label">Сброс пароля для</div>
+                    <div class="reset-email-value">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="15" height="15"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        {{ old('email', $email ?? '') }}
+                    </div>
                 </div>
 
                 <div class="form-group">

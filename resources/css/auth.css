@@ -1,0 +1,113 @@
+/* ── Auth pages ── */
+.auth-wrap          { min-height:60vh; display:flex; align-items:center; justify-content:center; padding:2rem 0; }
+.auth-box           { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--brand); width:100%; max-width:420px; padding:2.5rem; }
+.auth-title         { font-family:var(--font-display); font-size:2rem; letter-spacing:0.05em; margin-bottom:0.3rem; }
+.auth-sub           { font-size:0.82rem; color:var(--muted); margin-bottom:2rem; line-height:1.6; }
+.auth-sub a         { color:var(--brand); text-decoration:none; }
+.auth-sub a:hover   { text-decoration:underline; }
+
+/* ── Form groups ── */
+.form-group                         { margin-bottom:1.2rem; }
+.form-group label                   { display:block; font-size:0.75rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem; }
+.form-group input                   { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--ink); font-family:var(--font-body); font-size:0.9rem; padding:0.7rem 1rem; outline:none; transition:border-color 0.2s; }
+.form-group input::placeholder      { color:var(--muted); }
+.form-group input:focus             { border-color:var(--brand); }
+.form-group input.input-error       { border-color:#e53e3e; }
+.form-group input.input-error:focus { border-color:#e53e3e; }
+.form-hint                          { font-size:0.72rem; color:var(--muted); margin-top:0.35rem; }
+.form-error                         { font-size:0.75rem; color:#e53e3e; margin-top:0.3rem; }
+
+/* ── Checkbox ── */
+.form-check-wrap                        { margin-bottom:1.5rem; }
+.form-check                             { display:flex; align-items:flex-start; gap:0.6rem; color:var(--muted); font-size:0.8rem; line-height:1.5; cursor:pointer; }
+.form-check input[type="checkbox"]      { width:14px; height:14px; margin-top:3px; accent-color:var(--brand); cursor:pointer; flex-shrink:0; }
+.form-check a                           { color:var(--brand); text-decoration:none; }
+.form-check a:hover                     { text-decoration:underline; }
+.form-check p                           { margin:0; }
+
+/* ── Login row (remember + forgot) ── */
+.login-row          { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; font-size:0.8rem; }
+.form-link          { color:var(--brand); text-decoration:none; font-size:0.8rem; }
+.form-link:hover    { text-decoration:underline; }
+
+/* ── Profile grid rows ── */
+.profile-row        { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:0.9rem; }
+
+/* ── Submit ── */
+.submit-btn         { width:100%; background:var(--brand); color:#fff; border:none; padding:0.85rem; font-family:var(--font-body); font-size:0.85rem; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; transition:background 0.2s; margin-top:0.3rem; }
+.submit-btn:hover   { background:var(--brand-dk); }
+
+/* ── Bottom links ── */
+.login-link             { display:block; text-align:center; margin-top:1.5rem; font-size:0.82rem; color:var(--muted); }
+.login-link a           { color:var(--brand); text-decoration:none; font-weight:500; }
+.login-link a:hover     { text-decoration:underline; }
+.register-link          { display:block; text-align:center; margin-top:1.5rem; font-size:0.82rem; color:var(--muted); }
+.register-link a        { color:var(--brand); text-decoration:none; font-weight:500; }
+.register-link a:hover  { text-decoration:underline; }
+
+/* ── Divider ── */
+.auth-divider           { display:flex; align-items:center; gap:1rem; margin:1.5rem 0; color:var(--muted); font-size:0.75rem; }
+.auth-divider::before,
+.auth-divider::after    { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── Flash / Alert ── */
+.flash-success          { background:rgba(72,187,120,.1); border:1px solid #48bb78; color:#48bb78; padding:0.8rem 1rem; font-size:0.83rem; margin-bottom:1.2rem; }
+.flash-error            { background:rgba(229,62,62,.1);  border:1px solid #e53e3e; color:#e53e3e;  padding:0.8rem 1rem; font-size:0.83rem; margin-bottom:1.2rem; }
+.flash-error ul         { margin:0; padding-left:1.2rem; }
+.flash-error li         { margin-bottom:0.2rem; }
+.flash-error li:last-child { margin-bottom:0; }
+.auth-alert             { padding:0.85rem 1rem; font-size:0.85rem; margin-bottom:1.5rem; }
+.auth-alert-success     { background:rgba(72,187,120,.1); border:1px solid #48bb78; color:#48bb78; }
+.auth-alert-error       { background:rgba(229,62,62,.1);  border:1px solid #e53e3e; color:#e53e3e; }
+
+/* ── Account / Profile ── */
+.account-layout         { display:grid; grid-template-columns:220px 1fr; gap:2rem; align-items:start; }
+.account-sidebar        { background:var(--surface); border:1px solid var(--border); border-top:2px solid var(--brand); }
+.account-avatar         { padding:1.8rem 1.5rem 1.2rem; text-align:center; border-bottom:1px solid var(--border); }
+.avatar-circle          { width:60px; height:60px; background:var(--brand); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.8rem; font-family:var(--font-display); font-size:1.6rem; color:#fff; letter-spacing:0.05em; }
+.avatar-name            { font-size:0.88rem; font-weight:600; color:var(--ink); }
+.avatar-role            { font-size:0.72rem; color:var(--brand); letter-spacing:0.06em; text-transform:uppercase; margin-top:0.2rem; }
+
+.account-nav-link       { display:flex; align-items:center; gap:0.7rem; padding:0.75rem 1.2rem; color:var(--muted); text-decoration:none; font-size:0.82rem; transition:all 0.2s; border-left:2px solid transparent; width:100%; background:none; border-right:none; border-top:none; border-bottom:none; cursor:pointer; font-family:var(--font-body); text-align:left; }
+.account-nav-link:hover,
+.account-nav-link.active { color:var(--ink); background:var(--surface2); border-left-color:var(--brand); }
+.account-nav-link svg   { width:16px; height:16px; flex-shrink:0; }
+
+.account-card               { background:var(--surface); border:1px solid var(--border); border-top:2px solid var(--brand); padding:1.5rem; margin-bottom:1.2rem; }
+.account-card-title         { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--brand); margin-bottom:1.2rem; }
+.account-form-group         { margin-bottom:0.9rem; }
+.account-form-group:last-of-type { margin-bottom:0; }
+.account-form-group label   { display:block; font-size:0.72rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); margin-bottom:0.35rem; }
+.account-form-group input   { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--ink); font-family:var(--font-body); font-size:0.88rem; padding:0.6rem 0.9rem; outline:none; transition:border-color 0.2s; }
+.account-form-group input:focus { border-color:var(--brand); }
+.account-form-group input::placeholder { color:var(--muted); }
+.save-btn               { background:var(--brand); color:#fff; border:none; padding:0.65rem 1.8rem; font-family:var(--font-body); font-size:0.8rem; letter-spacing:0.07em; text-transform:uppercase; cursor:pointer; transition:background 0.2s; margin-top:1rem; display:inline-block; }
+.save-btn:hover         { background:var(--brand-dk); }
+
+/* ── Email verification status ── */
+.email-status           { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.7rem; letter-spacing:0.05em; text-transform:uppercase; margin-top:0.6rem; padding:0.25rem 0.6rem; }
+.email-status svg       { width:12px; height:12px; flex-shrink:0; }
+.email-status.verified  { background:rgba(72,187,120,.12); color:#48bb78; border:1px solid rgba(72,187,120,.3); }
+.email-status.unverified { background:rgba(237,137,54,.12); color:#ed8936; border:1px solid rgba(237,137,54,.3); }
+
+/* ── Verify banner (profile page) ── */
+.verify-banner          { display:flex; align-items:center; justify-content:space-between; gap:1rem; background:rgba(237,137,54,.08); border:1px solid rgba(237,137,54,.3); border-left:3px solid #ed8936; padding:0.85rem 1.2rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+.verify-banner-text     { display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:var(--ink); }
+.verify-banner-text svg { flex-shrink:0; color:#ed8936; }
+.verify-banner-btn      { background:#ed8936; color:#fff; border:none; padding:0.5rem 1.2rem; font-family:var(--font-body); font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:background 0.2s; white-space:nowrap; }
+.verify-banner-btn:hover { background:#dd7a26; }
+
+/* ── Verify top banner (layout) ── */
+.verify-top-banner      { background:#ed8936; color:#fff; padding:0.55rem 1rem; font-size:0.78rem; display:flex; align-items:center; justify-content:center; gap:1rem; }
+.verify-top-inner       { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; max-width:1400px; margin:0 auto; width:100%; }
+.verify-top-left        { display:flex; align-items:center; gap:0.5rem; flex:1; }
+.verify-top-right       { display:flex; align-items:center; gap:1rem; flex-shrink:0; }
+.verify-resend-btn      { background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.5); padding:0.35rem 1rem; font-family:var(--font-body); font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; transition:background 0.2s; }
+.verify-resend-btn:hover { background:rgba(255,255,255,0.35); }
+.verify-account-link    { color:rgba(255,255,255,0.85); font-size:0.75rem; text-decoration:none; white-space:nowrap; }
+.verify-account-link:hover { color:#fff; text-decoration:underline; }
+
+@media (max-width:768px) {
+    .account-layout { grid-template-columns:1fr; }
+    .profile-row    { grid-template-columns:1fr; }
+}

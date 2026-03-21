@@ -1,0 +1,272 @@
+@extends('layouts.layout')
+
+@section('title', 'Редактировать товар — Админ')
+
+@push('styles')
+    @vite(['resources/css/admin/products.css'])
+@endpush
+
+@section('content')
+
+    <h1 class="form-page-title">{{ $product->name }}</h1>
+    <p class="form-page-sub">Арт. {{ $product->sku }} &nbsp;·&nbsp; {{ $product->category->name }}</p>
+
+    @if(session('success'))
+        <div class="flash-success">{{ session('success') }}</div>
+    @endif
+    @if($errors->any())
+        <div class="error-box">
+            <strong>Пожалуйста, исправьте ошибки:</strong>
+            <ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+        </div>
+    @endif
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="info">📦 Информация о товаре</button>
+        <button class="tab-btn {{ request('tab') === 'analogs' ? 'active' : '' }}" data-tab="analogs">
+            🔄 Аналоги
+            <span class="tab-badge {{ $product->analogs->count() === 0 ? 'empty' : '' }}">{{ $product->analogs->count() }}</span>
+        </button>
+    </div>
+
+    {{-- TAB 1: INFO --}}
+    <div id="tab-info" class="tab-panel active">
+        <form method="POST" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data">
+            @csrf @method('PUT')
+            <div class="form-grid">
+
+                {{-- LEFT --}}
+                <div>
+                    <div class="form-card">
+                        <div class="form-card-title">Основная информация</div>
+                        <div class="form-group">
+                            <label for="name">Название *</label>
+                            <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}" required>
+                            @error('name') <div class="form-error">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sku">SKU / Артикул *</label>
+                                <input type="text" id="sku" name="sku" value="{{ old('sku', $product->sku) }}" required>
+                                @error('sku') <div class="form-error">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="brand">Бренд</label>
+                                <input type="text" id="brand" name="brand" value="{{ old('brand', $product->brand) }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Описание</label>
+                            <textarea id="description" name="description">{{ old('description', $product->description) }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-title">Цена и склад</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price">Цена (դր.) *</label>
+                                <input type="number" id="price" name="price" step="0.01" min="0" value="{{ old('price', $product->price) }}" required>
+                                @error('price') <div class="form-error">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Количество *</label>
+                                <input type="number" id="quantity" name="quantity" min="0" value="{{ old('quantity', $product->quantity) }}" required>
+                                @error('quantity') <div class="form-error">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-title">Подходит для автомобилей</div>
+                        <div class="makes-accordion">
+                            @foreach($carMakes as $make)
+                                <div class="make-group">
+                                    <div class="make-name">{{ $make->name }}</div>
+                                    <div class="models-list">
+                                        @foreach($make->carModels as $model)
+                                            <label class="model-check">
+                                                <input type="checkbox" name="car_models[]" value="{{ $model->id }}"
+                                                    {{ $product->carModels->contains($model->id) || in_array($model->id, old('car_models', [])) ? 'checked' : '' }}>
+                                                {{ $make->name }} {{ $model->name }}
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- RIGHT --}}
+                <div>
+                    <div class="form-card">
+                        <div class="form-card-title">Категория *</div>
+                        <div class="form-group">
+                            <select name="category_id" required>
+                                <option value="">— Выберите категорию —</option>
+                                @foreach(App\Models\Category::flatTree() as $item)
+                                    <option value="{{ $item['category']->id }}"
+                                        {{ old('category_id', $product->category_id) == $item['category']->id ? 'selected' : '' }}>
+                                        {{ str_repeat('&nbsp;&nbsp;&nbsp;', $item['depth']) }}{{ $item['depth'] > 0 ? '└ ' : '' }}{{ $item['category']->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category_id') <div class="form-error">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-title">Изображение товара</div>
+                        <div class="img-preview" id="preview-box">
+                            @if($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="">
+                            @else
+                                <span class="img-placeholder">Нет изображения</span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Загрузить изображение</label>
+                            <input type="file" id="image" name="image" accept="image/*">
+                            @error('image') <div class="form-error">{{ $message }}</div> @enderror
+                        </div>
+                        @if($product->image)
+                            <label class="check-label" style="margin-top:0.5rem;">
+                                <input type="checkbox" name="remove_image" value="1">
+                                Удалить текущее изображение
+                            </label>
+                        @endif
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-title">Публикация</div>
+                        <div class="form-group">
+                            <label class="check-label">
+                                <input type="checkbox" name="is_active" value="1"
+                                    {{ old('is_active', $product->is_active) ? 'checked' : '' }}>
+                                Товар активен (виден покупателям)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-title">
+                            Аналоги
+                            <a href="{{ route('admin.analogs.create') }}" target="_blank">+ создать новый</a>
+                        </div>
+                        @if($analogs->isEmpty())
+                            <div class="analogs-empty">Справочник пуст. <a href="{{ route('admin.analogs.create') }}" target="_blank">Добавить →</a></div>
+                        @else
+                            <div class="analogs-scroll">
+                                @foreach($analogs->groupBy('brand') as $brand => $group)
+                                    <div class="analog-brand-group">
+                                        <div class="analog-brand-label">{{ $brand }}</div>
+                                        @foreach($group as $analog)
+                                            <label class="analog-check-row">
+                                                <input type="checkbox" name="analogs[]" value="{{ $analog->id }}"
+                                                    {{ $product->analogs->contains($analog->id) || in_array($analog->id, old('analogs', [])) ? 'checked' : '' }}>
+                                                <span class="analog-check-sku">{{ $analog->sku }}</span>
+                                                @if($analog->note)<span class="analog-check-note">{{ $analog->note }}</span>@endif
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
+                    <button type="submit" class="btn btn-primary form-submit">Сохранить изменения</button>
+                    <a href="{{ route('admin.products') }}" class="form-back">← Назад к списку</a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    {{-- TAB 2: ANALOGS --}}
+    <div id="tab-analogs" class="tab-panel {{ request('tab') === 'analogs' ? 'active' : '' }}">
+
+        <div class="analog-hint">
+            Выберите аналоги из справочника для детали <strong>{{ $product->sku }}</strong>.
+            Для добавления нового — <a href="{{ route('admin.analogs.create') }}" target="_blank">создать аналог →</a>
+        </div>
+
+        <div class="analogs-layout">
+
+            {{-- Current --}}
+            <div class="analog-card">
+                <div class="analog-card-header">
+                    <span class="analog-card-title">Привязанные аналоги</span>
+                    <span class="analog-card-count">{{ $product->analogs->count() }} шт.</span>
+                </div>
+                <table class="analog-table">
+                    <tbody>
+                    @forelse($product->analogs as $a)
+                        <tr>
+                            <td><span class="brand-pill">{{ $a->brand }}</span></td>
+                            <td class="analog-sku">{{ $a->sku }}</td>
+                            <td class="analog-note">{{ $a->note ?? '' }}</td>
+                            <td class="analog-td-right">
+                                <form method="POST" action="{{ route('admin.products.analogs.detach', [$product, $a]) }}">
+                                    @csrf @method('DELETE')
+                                    <input type="hidden" name="tab" value="analogs">
+                                    <button type="submit" class="analog-del-btn">✕ Убрать</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4" class="empty-analog">Аналоги не привязаны</td></tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Add from directory --}}
+            <div class="analog-card">
+                <div class="analog-card-header">
+                    <span class="analog-card-title">Добавить из справочника</span>
+                    <span class="analog-card-count">{{ $suggestions->total() }} доступно</span>
+                </div>
+                <form method="GET" class="analog-search">
+                    <input type="hidden" name="tab" value="analogs">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Бренд или артикул...">
+                    <button type="submit">Найти</button>
+                </form>
+                <table class="analog-table">
+                    <tbody>
+                    @forelse($suggestions as $s)
+                        <tr>
+                            <td><span class="brand-pill">{{ $s->brand }}</span></td>
+                            <td class="analog-sku">{{ $s->sku }}</td>
+                            <td class="analog-note">{{ $s->note ?? '' }}</td>
+                            <td class="analog-td-right-lg">
+                                <form method="POST" action="{{ route('admin.products.analogs.attach', [$product, $s]) }}">
+                                    @csrf
+                                    <input type="hidden" name="tab" value="analogs">
+                                    <button type="submit" class="analog-add-btn">+ Добавить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4" class="empty-analog">
+                                {{ request('q') ? 'Ничего не найдено по «' . request('q') . '»' : 'Все аналоги уже добавлены' }}
+                            </td></tr>
+                    @endforelse
+                    </tbody>
+                </table>
+                @if($suggestions->hasPages())
+                    <div class="analog-footer">{{ $suggestions->appends(['tab' => 'analogs', 'q' => request('q')])->links() }}</div>
+                @endif
+                <div class="analog-footer">
+                    <a href="{{ route('admin.analogs.create') }}" target="_blank">+ Создать новый аналог в справочнике →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+@endsection
+
+@push('scripts')
+    @vite(['resources/js/admin/products.js'])
+@endpush

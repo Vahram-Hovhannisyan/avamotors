@@ -1,0 +1,12 @@
+/node_modules
+/public/build
+/vendor
+/.env
+/storage/*.key
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+.phpunit.result.cache
+Thumbs.db
+.DS_Store

@@ -1,0 +1,92 @@
+/* ── Layout ── */
+.page-header        { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+.page-title         { font-family:var(--font-display); font-size:1.8rem; letter-spacing:0.05em; }
+.page-date          { font-size:0.8rem; color:var(--muted); }
+
+.quick-actions      { display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+.quick-link         { background:var(--surface); border:1px solid var(--border); color:var(--muted); text-decoration:none; font-size:0.75rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.5rem 1rem; transition:all 0.2s; }
+.quick-link:hover   { background:var(--brand); border-color:var(--brand); color:#fff; }
+
+.page-layout        { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+
+/* ── Section card ── */
+.section-card                { background:var(--surface); border:1px solid var(--border); border-top:2px solid var(--brand); }
+.section-card-header         { display:flex; justify-content:space-between; align-items:center; padding:0.85rem 1.2rem; border-bottom:1px solid var(--border); }
+.section-card-title          { font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--brand); }
+.section-card-count          { font-size:0.7rem; color:var(--muted); }
+.section-card-body           { padding:1.2rem 1.4rem; }
+
+/* ── Shared inputs ── */
+.f-input, .f-select {
+    width:100%; box-sizing:border-box;
+    background:var(--surface2); border:1px solid var(--border); color:var(--ink);
+    font-family:var(--font-body); font-size:0.85rem; padding:0.6rem 0.8rem;
+    outline:none; transition:border-color 0.2s;
+}
+.f-input:focus, .f-select:focus { border-color:var(--brand); }
+
+.f-btn {
+    background:var(--brand); color:#fff; border:none; padding:0 1.1rem; height:36px;
+    font-family:var(--font-body); font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase;
+    cursor:pointer; transition:background 0.2s; white-space:nowrap;
+}
+.f-btn:hover { background:var(--brand-dk); }
+
+.f-btn-ghost {
+    background:none; color:var(--muted); border:1px solid var(--border); padding:0 0.7rem; height:36px;
+    font-family:var(--font-body); font-size:0.78rem; cursor:pointer; transition:all 0.2s;
+    flex-shrink:0; text-decoration:none; display:inline-flex; align-items:center;
+}
+.f-btn-ghost:hover { border-color:#e53e3e; color:#e53e3e; }
+
+.form-error { font-size:0.72rem; color:#e53e3e; margin-top:0.3rem; }
+
+/* ── Search ── */
+.search-form        { margin-bottom:1rem; }
+.search-row         { display:flex; gap:0.4rem; }
+.search-row .f-input { flex:1; width:auto; }
+
+/* ── Make form ── */
+.make-form-row              { display:flex; gap:0.5rem; margin-bottom:0.8rem; }
+.make-form-row .f-input     { flex:1; width:auto; }
+
+/* ── Model form ── */
+.model-form         { margin-bottom:0.8rem; }
+.model-form-top     { margin-bottom:0.5rem; }
+.model-names-list   { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:0.6rem; }
+.model-name-row     { display:flex; gap:0.4rem; align-items:center; }
+.model-name-row .f-input { flex:1; width:auto; }
+.model-form-footer  { display:flex; justify-content:space-between; align-items:center; }
+
+.add-row-btn {
+    background:none; border:none; color:var(--brand); font-family:var(--font-body);
+    font-size:0.78rem; letter-spacing:0.05em; cursor:pointer; padding:0;
+}
+.add-row-btn:hover { text-decoration:underline; }
+
+/* ── Table ── */
+.data-table         { width:100%; border-collapse:collapse; }
+.data-table th      { font-size:0.65rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--brand); padding:0.65rem 1rem; text-align:left; background:var(--surface); border-bottom:1px solid var(--border); }
+.data-table td      { padding:0.65rem 1rem; font-size:0.82rem; border-bottom:1px solid var(--border); background:var(--surface); vertical-align:middle; }
+.data-table tr:last-child td  { border-bottom:none; }
+.data-table tr:hover td       { background:var(--surface2); }
+
+/* ── Table helpers ── */
+.fw-500     { font-weight:500; }
+.text-muted { color:var(--muted); }
+.text-sm    { font-size:0.78rem; }
+.text-right { text-align:right; }
+.empty-cell { text-align:center; color:var(--muted); padding:1.5rem; }
+
+/* ── Delete btn ── */
+.del-btn        { background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.72rem; font-family:var(--font-body); transition:color 0.2s; padding:0; }
+.del-btn:hover  { color:#e53e3e; }
+
+/* ── Pagination ── */
+.pagination-wrap { padding:0.8rem 1.2rem; border-top:1px solid var(--border); }
+
+/* ── Flash ── */
+.flash-success { background:rgba(72,187,120,.1); border:1px solid #48bb78; color:#48bb78; padding:0.8rem 1.2rem; font-size:0.85rem; margin-bottom:1.5rem; }
+.flash-error   { background:rgba(229,62,62,.1);  border:1px solid #e53e3e; color:#e53e3e;   padding:0.8rem 1.2rem; font-size:0.85rem; margin-bottom:1.5rem; }
+
+@media (max-width:900px) { .page-layout { grid-template-columns:1fr; } }

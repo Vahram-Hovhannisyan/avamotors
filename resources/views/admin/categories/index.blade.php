@@ -109,7 +109,7 @@
                         @foreach(App\Models\Category::flatTree() as $item)
                             <option value="{{ $item['category']->id }}"
                                 {{ old('parent_id') == $item['category']->id ? 'selected' : '' }}>
-                                {{ str_repeat('&nbsp;&nbsp;&nbsp;', $item['depth']) }}{{ $item['depth'] > 0 ? '└ ' : '' }}{{ $item['category']->name }}
+                                {{ $item['depth'] > 0 ? '└ ' : '' }}{{ $item['category']->name }}
                             </option>
                         @endforeach
                     </select>

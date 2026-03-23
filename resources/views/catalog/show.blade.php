@@ -10,6 +10,14 @@
 
     <x-flash-message />
 
+    @php
+        $user = auth()->user();
+        $originalPrice = $product->price;
+        $finalPrice = $product->final_price ?? $product->getPriceForUser($user);
+        $hasDiscount = $product->has_discount ?? $product->hasSpecialPriceForUser($user);
+        $discountInfo = $product->discount_info ?? $product->getDiscountForUser($user);
+    @endphp
+
     <nav class="breadcrumb">
         <a href="{{ route('home') }}">Главная</a>
         <span class="breadcrumb-sep">/</span>
@@ -44,7 +52,44 @@
             <div class="product-category-label">{{ $product->category->name }}</div>
             <h1 class="product-title">{{ $product->name }}</h1>
             <div class="product-sku-label">Артикул: <strong>{{ $product->sku }}</strong></div>
-            <div class="product-price-big">{{ $product->formattedPrice() }}</div>
+
+            {{-- Price section with discount info --}}
+            <div class="product-price-wrapper">
+                @if($hasDiscount && $discountInfo)
+                    <div class="product-price-old">{{ number_format($originalPrice, 0) }} դր.</div>
+                    <div class="product-price-big">{{ number_format($finalPrice, 0) }} դր.</div>
+                    <span class="discount-badge-large">
+                        @if($discountInfo['type'] === 'percentage')
+                            -{{ $discountInfo['percent'] }}%
+                        @else
+                            -{{ number_format($discountInfo['amount'], 0) }} դր.
+                        @endif
+                    </span>
+                @else
+                    <div class="product-price-big">{{ number_format($finalPrice, 0) }} դր.</div>
+                @endif
+            </div>
+
+            {{-- Tier information --}}
+            @if($hasDiscount && $discountInfo && isset($discountInfo['tier_name']))
+                <div class="tier-info">
+                    🎯 Специальная цена для уровня: <strong>{{ $discountInfo['tier_name'] }}</strong>
+                </div>
+            @endif
+
+            {{-- Savings info for fixed discounts --}}
+            @if($hasDiscount && $discountInfo && $discountInfo['type'] === 'fixed')
+                <div class="savings-info">
+                    💰 Экономия: <strong>{{ number_format($discountInfo['amount'], 0) }} դր.</strong>
+                </div>
+            @endif
+
+            {{-- Original price info for percentage discounts --}}
+            @if($hasDiscount && $discountInfo && $discountInfo['type'] === 'percentage')
+                <div class="original-price-info">
+                    Обычная цена: {{ number_format($originalPrice, 0) }} դր.
+                </div>
+            @endif
 
             @if($product->quantity > 5)
                 <div class="stock-badge in">В наличии ({{ $product->quantity }} шт.)</div>
@@ -69,13 +114,34 @@
             </form>
 
             <table class="meta-table">
-                <tr><td>Бренд</td><td>{{ $product->brand ?? '—' }}</td></tr>
+                <tr>
+                    <td>Бренд</td>
+                    <td>{{ $product->brand ?? '—' }}</td>
+                </tr>
                 <tr>
                     <td>Категория</td>
                     <td><a href="{{ route('catalog.category', $product->category->slug) }}">{{ $product->category->name }}</a></td>
                 </tr>
-                <tr><td>Артикул</td><td>{{ $product->sku }}</td></tr>
-                <tr><td>На складе</td><td>{{ $product->quantity }} шт.</td></tr>
+                <tr>
+                    <td>Артикул</td>
+                    <td>{{ $product->sku }}</td>
+                </tr>
+                <tr>
+                    <td>На складе</td>
+                    <td>{{ $product->quantity }} шт.</td>
+                </tr>
+                @if($hasDiscount && $discountInfo)
+                    <tr>
+                        <td>Тип скидки</td>
+                        <td>
+                            @if($discountInfo['type'] === 'percentage')
+                                Процентная скидка ({{ $discountInfo['percent'] }}%)
+                            @else
+                                Фиксированная скидка ({{ number_format($discountInfo['amount'], 0) }} դր.)
+                            @endif
+                        </td>
+                    </tr>
+                @endif
             </table>
 
             @if($product->carModels->isNotEmpty())
@@ -105,7 +171,11 @@
             <div class="analogs-wrap">
                 <table class="analogs-table">
                     <thead>
-                    <tr><th>Бренд</th><th>Артикул</th><th>Примечание</th></tr>
+                    <tr>
+                        <th>Бренд</th>
+                        <th>Артикул</th>
+                        <th>Примечание</th>
+                    </tr>
                     </thead>
                     <tbody>
                     @foreach($product->analogs->groupBy('brand') as $brand => $group)

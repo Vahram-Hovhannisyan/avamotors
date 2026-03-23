@@ -9,24 +9,48 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class OrderService implements OrderServiceInterface  // Теперь только 3 метода
+class OrderService implements OrderServiceInterface
 {
     public function __construct(
         private readonly CartServiceInterface $cart
     ) {}
 
-    public function createOrder(Request $request, ?User $user): Order
+    /**
+     * Create order from cart with pricing tiers support
+     */
+    public function createOrder(Request $request, ?User $user, array $cartData = []): Order
     {
-        $items = $this->cart->getItems();
+        // Если cartData не передана, получаем из корзины
+        if (empty($cartData)) {
+            $cartData = $this->cart->getCart();
+        }
+
+        $items = $cartData['items'] ?? [];
+        $total = $cartData['total'] ?? 0;
+        $count = $cartData['count'] ?? 0;
 
         if (empty($items)) {
             throw new \RuntimeException('Корзина пуста.');
         }
 
-        try {
-            return DB::transaction(function () use ($request, $user, $items) {
+        // Рассчитываем subtotal (сумма без скидок)
+        $subtotal = 0;
+        $discountTotal = 0;
 
-                // Создаем заказ
+        foreach ($items as $item) {
+            $product = $item['product'];
+            $originalPrice = $item['original_price'] ?? $product->price;
+            $currentPrice = $item['price'];
+            $quantity = $item['quantity'];
+
+            $subtotal += $originalPrice * $quantity;
+            $discountTotal += ($originalPrice - $currentPrice) * $quantity;
+        }
+
+        try {
+            return DB::transaction(function () use ($request, $user, $items, $total, $subtotal, $discountTotal) {
+
+                // Создаем заказ с данными о скидках
                 $order = Order::create([
                     'user_id' => $user?->id,
                     'name'    => $request->name,
@@ -35,35 +59,58 @@ class OrderService implements OrderServiceInterface  // Теперь тольк�
                     'address' => $request->address,
                     'comment' => $request->comment,
                     'status'  => 'pending',
-                    'total'   => $this->cart->total(),
+                    'total'   => $total, // Итоговая сумма со скидками
+                    'subtotal' => $subtotal, // Сумма без скидок
+                    'discount_total' => $discountTotal, // Общая сумма скидки
                 ]);
 
-                // Создаем элементы заказа
+                \Log::info('Order created with discounts', [
+                    'order_id' => $order->id,
+                    'subtotal' => $subtotal,
+                    'discount_total' => $discountTotal,
+                    'total' => $total
+                ]);
+
+                // Создаем элементы заказа с ценами со скидками
                 foreach ($items as $item) {
                     $product = $item['product'];
+                    $originalPrice = $item['original_price'] ?? $product->price;
+                    $currentPrice = $item['price'];
+                    $quantity = $item['quantity'];
+                    $hasDiscount = $item['has_discount'] ?? false;
+                    $discountInfo = $item['discount_info'] ?? null;
 
-                    // Рассчитываем subtotal
-                    $subtotal = $product->price * $item['quantity'];
+                    $itemSubtotal = $currentPrice * $quantity;
+                    $itemOriginalSubtotal = $originalPrice * $quantity;
+                    $itemDiscount = $itemOriginalSubtotal - $itemSubtotal;
 
-                    \Log::info('Creating order item', [
+                    \Log::info('Creating order item with discount', [
                         'order_id' => $order->id,
                         'product_id' => $product->id,
-                        'quantity' => $item['quantity'],
-                        'price' => $product->price,
-                        'subtotal' => $subtotal
+                        'product_name' => $product->name,
+                        'quantity' => $quantity,
+                        'original_price' => $originalPrice,
+                        'current_price' => $currentPrice,
+                        'item_subtotal' => $itemSubtotal,
+                        'item_discount' => $itemDiscount,
+                        'has_discount' => $hasDiscount
                     ]);
 
-                    $order->items()->create([
+                    $orderItem = $order->items()->create([
                         'product_id'   => $product->id,
                         'product_name' => $product->name,
                         'product_sku'  => $product->sku,
-                        'price'        => $product->price,
-                        'quantity'     => $item['quantity'],
-                        'subtotal'     => $subtotal, // ОБЯЗАТЕЛЬНО нужно передавать!
+                        'price'        => $currentPrice, // Цена со скидкой
+                        'original_price' => $originalPrice, // Оригинальная цена
+                        'quantity'     => $quantity,
+                        'subtotal'     => $itemSubtotal, // Сумма со скидкой
+                        'original_subtotal' => $itemOriginalSubtotal, // Сумма без скидки
+                        'discount_amount' => $itemDiscount, // Сумма скидки для этого товара
+                        'discount_info' => $discountInfo, // Информация о скидке (JSON)
                     ]);
 
-                    // Уменьшаем количество товара
-                    $product->decrement('quantity', $item['quantity']);
+                    // Уменьшаем количество товара на складе
+                    $product->decrement('quantity', $quantity);
                 }
 
                 // Очищаем корзину

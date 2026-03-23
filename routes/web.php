@@ -142,6 +142,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::delete('/products/{product}/analogs/{analog}', [AnalogController::class, 'detach'])->name('products.analogs.detach');
 
 
+    Route::resource('pricing-tiers', \App\Http\Controllers\Admin\PricingTierController::class);
+    Route::post('pricing-tiers/{pricingTier}/bulk-assign', [\App\Http\Controllers\Admin\PricingTierController::class, 'bulkAssign'])->name('pricing-tiers.bulk-assign');
+    Route::delete('pricing-tiers/{pricingTier}/remove-users', [\App\Http\Controllers\Admin\PricingTierController::class, 'removeUsers'])->name('pricing-tiers.remove-users');
+    Route::patch('pricing-tiers/{pricingTier}/toggle-status', [\App\Http\Controllers\Admin\PricingTierController::class, 'toggleStatus'])->name('pricing-tiers.toggle-status');
+
+
     Route::get('/orders/{order}/invoice/download', [InvoiceController::class, 'download'])
         ->name('orders.invoice.download');
 

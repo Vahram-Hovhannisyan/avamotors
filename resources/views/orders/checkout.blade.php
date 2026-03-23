@@ -3,7 +3,7 @@
 @section('title', 'Оформление заказа — AVAMotors')
 
 @push('styles')
-    @vite(['resources/css/orders-front.css'])
+    @vite(['resources/css/orders.css'])
 @endpush
 
 @section('content')
@@ -54,24 +54,113 @@
 
             <div class="order-summary">
                 <div class="summary-title">Ваш заказ</div>
+
+                @php
+                    $totalOriginal = 0;
+                    $totalDiscount = 0;
+                    $totalFinal = 0;
+                @endphp
+
                 @foreach($items as $item)
-                    @php $product = $item['product']; @endphp
+                    @php
+                        $product = $item['product'];
+                        $hasDiscount = $item['has_discount'] ?? false;
+                        $originalPrice = $item['original_price'] ?? $product->price;
+                        $currentPrice = $item['price'];
+                        $quantity = $item['quantity'];
+                        $subtotal = $currentPrice * $quantity;
+                        $originalSubtotal = $originalPrice * $quantity;
+                        $savings = $originalSubtotal - $subtotal;
+
+                        $totalOriginal += $originalSubtotal;
+                        $totalFinal += $subtotal;
+                        $totalDiscount += $savings;
+                    @endphp
+
                     @if($product)
-                        <div class="order-item">
-                            <div>
+                        <div class="order-item {{ $hasDiscount ? 'has-discount' : '' }}">
+                            <div class="order-item-info">
                                 <div class="order-item-name">{{ $product->name }}</div>
-                                <div class="order-item-sku">{{ $product->sku }} × {{ $item['quantity'] }}</div>
+                                <div class="order-item-sku">Арт. {{ $product->sku }}</div>
+                                @if($hasDiscount)
+                                    <div class="order-item-discount-badge">
+                                        @php
+                                            $discountInfo = $item['discount_info'] ?? null;
+                                        @endphp
+                                        @if($discountInfo && $discountInfo['type'] === 'percentage')
+                                            Скидка {{ $discountInfo['percent'] }}%
+                                        @elseif($discountInfo && $discountInfo['type'] === 'fixed')
+                                            Скидка {{ number_format($discountInfo['amount'], 0) }} դր.
+                                        @endif
+                                        @if($discountInfo && isset($discountInfo['tier_name']))
+                                            <span class="tier-name">({{ $discountInfo['tier_name'] }})</span>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
-                            <div class="order-item-price">
-                                {{ number_format($product->price * $item['quantity'], 0, '.', ' ') }} դր.
+                            <div class="order-item-price-wrapper">
+                                <div class="order-item-quantity">{{ $quantity }} шт.</div>
+                                <div class="order-item-price">
+                                    @if($hasDiscount)
+                                        <div class="price-with-discount">
+                                            <span class="current-price">{{ number_format($currentPrice, 0, '.', ' ') }} դր.</span>
+                                            <span class="old-price">{{ number_format($originalPrice, 0, '.', ' ') }} դր.</span>
+                                        </div>
+                                        <div class="item-subtotal">
+                                            {{ number_format($subtotal, 0, '.', ' ') }} դր.
+                                        </div>
+                                        @if($savings > 0)
+                                            <div class="item-savings">
+                                                экономия {{ number_format($savings, 0, '.', ' ') }} դր.
+                                            </div>
+                                        @endif
+                                    @else
+                                        <div class="regular-price">
+                                            {{ number_format($currentPrice, 0, '.', ' ') }} դր.
+                                        </div>
+                                        <div class="item-subtotal">
+                                            {{ number_format($subtotal, 0, '.', ' ') }} դր.
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endif
                 @endforeach
+
+                <!-- Сводка по скидкам -->
+                @if($totalDiscount > 0)
+                    <div class="order-discount-summary">
+                        <div class="discount-row">
+                            <span>Сумма без скидки</span>
+                            <span>{{ number_format($totalOriginal, 0, '.', ' ') }} դր.</span>
+                        </div>
+                        <div class="discount-row savings">
+                            <span>Скидка</span>
+                            <span>- {{ number_format($totalDiscount, 0, '.', ' ') }} դր.</span>
+                        </div>
+                        @if(auth()->user() && auth()->user()->discount_tier)
+                            <div class="discount-tier-info">
+                                <span>Ваш уровень: {{ auth()->user()->discount_tier->name }}</span>
+                                @if(auth()->user()->discount_tier->discount_percentage)
+                                    <span>({{ auth()->user()->discount_tier->discount_percentage }}% скидка)</span>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
+                <!-- Итоговая сумма -->
                 <div class="order-total">
-                    <span>Итого</span>
-                    <span>{{ number_format($total, 0, '.', ' ') }} դր.</span>
+                    <span>Итого к оплате</span>
+                    <div class="total-wrapper">
+                        @if($totalDiscount > 0)
+                            <span class="total-original">{{ number_format($totalOriginal, 0, '.', ' ') }} դր.</span>
+                        @endif
+                        <span class="total-final">{{ number_format($totalFinal, 0, '.', ' ') }} դր.</span>
+                    </div>
                 </div>
+
                 <button type="submit" class="submit-btn">Подтвердить заказ</button>
                 <a href="{{ route('cart.index') }}" class="checkout-back">← Вернуться в корзину</a>
             </div>

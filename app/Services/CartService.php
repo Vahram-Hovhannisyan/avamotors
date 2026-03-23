@@ -12,9 +12,11 @@ class CartService implements CartServiceInterface
 {
     private ?Cart $cart = null;
     private array $items = [];
+    private $user = null;
 
     public function __construct()
     {
+        $this->user = auth()->user();
         $this->loadCart();
     }
 
@@ -55,11 +57,19 @@ class CartService implements CartServiceInterface
         foreach ($items as $item) {
             $product = $products[$item['product_id']] ?? null;
             if ($product) {
+                // Получаем цену с учетом ценовых уровней
+                $finalPrice = $product->getPriceForUser($this->user);
+                $hasDiscount = $product->hasSpecialPriceForUser($this->user);
+                $discountInfo = $product->getDiscountForUser($this->user);
+
                 $this->items[] = [
                     'product_id' => $item['product_id'],
                     'product' => $product,
                     'quantity' => $item['quantity'],
-                    'price' => $item['price'] ?? $product->price,
+                    'price' => $finalPrice, // Используем цену с учетом скидки
+                    'original_price' => $product->price, // Оригинальная цена
+                    'has_discount' => $hasDiscount,
+                    'discount_info' => $discountInfo,
                     'name' => $item['name'] ?? $product->name,
                     'sku' => $item['sku'] ?? $product->sku,
                 ];
@@ -75,7 +85,8 @@ class CartService implements CartServiceInterface
             return [
                 'product_id' => $item['product_id'],
                 'quantity' => $item['quantity'],
-                'price' => $item['price'],
+                'price' => $item['price'], // Сохраняем цену со скидкой
+                'original_price' => $item['original_price'] ?? $item['price'],
                 'name' => $item['name'],
                 'sku' => $item['sku'],
             ];
@@ -83,11 +94,15 @@ class CartService implements CartServiceInterface
 
         $this->cart->items = $items;
         $this->cart->save();
+
+        Log::info('Cart saved', [
+            'cart_id' => $this->cart->id,
+            'user_id' => $this->cart->user_id,
+            'session_id' => $this->cart->session_id,
+            'items_count' => count($items)
+        ]);
     }
 
-    /**
-     * Get cart items
-     */
     public function getItems(): array
     {
         return $this->items;
@@ -101,8 +116,20 @@ class CartService implements CartServiceInterface
             'total' => $this->total()
         ];
 
-        // Для отладки
-        \Log::info('CartService getCart()', $result);
+        Log::info('CartService getCart()', [
+            'items_count' => count($this->items),
+            'total' => $result['total'],
+            'items' => array_map(function($item) {
+                return [
+                    'product_id' => $item['product_id'],
+                    'name' => $item['name'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'original_price' => $item['original_price'] ?? null,
+                    'has_discount' => $item['has_discount'] ?? false
+                ];
+            }, $this->items)
+        ]);
 
         return $result;
     }
@@ -115,6 +142,11 @@ class CartService implements CartServiceInterface
             throw new \RuntimeException('Товар не доступен для заказа.');
         }
 
+        // Получаем цену с учетом ценовых уровней
+        $finalPrice = $product->getPriceForUser($this->user);
+        $hasDiscount = $product->hasSpecialPriceForUser($this->user);
+        $discountInfo = $product->getDiscountForUser($this->user);
+
         foreach ($this->items as &$item) {
             if ($item['product_id'] == $productId) {
                 $newQuantity = $item['quantity'] + $quantity;
@@ -124,7 +156,10 @@ class CartService implements CartServiceInterface
                 }
 
                 $item['quantity'] = $newQuantity;
-                $item['price'] = $product->price;
+                $item['price'] = $finalPrice;
+                $item['original_price'] = $product->price;
+                $item['has_discount'] = $hasDiscount;
+                $item['discount_info'] = $discountInfo;
                 $item['name'] = $product->name;
                 $item['sku'] = $product->sku;
                 $this->save();
@@ -140,12 +175,23 @@ class CartService implements CartServiceInterface
             'product_id' => $productId,
             'product' => $product,
             'quantity' => $quantity,
-            'price' => $product->price,
+            'price' => $finalPrice,
+            'original_price' => $product->price,
+            'has_discount' => $hasDiscount,
+            'discount_info' => $discountInfo,
             'name' => $product->name,
             'sku' => $product->sku,
         ];
 
         $this->save();
+
+        Log::info('Product added to cart', [
+            'product_id' => $productId,
+            'quantity' => $quantity,
+            'price' => $finalPrice,
+            'has_discount' => $hasDiscount,
+            'total_items' => count($this->items)
+        ]);
     }
 
     public function update(int $productId, int $quantity): void
@@ -156,6 +202,9 @@ class CartService implements CartServiceInterface
         }
 
         $product = Product::findOrFail($productId);
+        $finalPrice = $product->getPriceForUser($this->user);
+        $hasDiscount = $product->hasSpecialPriceForUser($this->user);
+        $discountInfo = $product->getDiscountForUser($this->user);
 
         foreach ($this->items as &$item) {
             if ($item['product_id'] == $productId) {
@@ -164,7 +213,10 @@ class CartService implements CartServiceInterface
                 }
 
                 $item['quantity'] = $quantity;
-                $item['price'] = $product->price;
+                $item['price'] = $finalPrice;
+                $item['original_price'] = $product->price;
+                $item['has_discount'] = $hasDiscount;
+                $item['discount_info'] = $discountInfo;
                 $item['name'] = $product->name;
                 $item['sku'] = $product->sku;
                 $this->save();

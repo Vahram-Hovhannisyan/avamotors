@@ -20,6 +20,7 @@
         <a href="{{ route('admin.products.create') }}" class="quick-link primary">+ Добавить товар</a>
         <a href="{{ route('admin.categories') }}"      class="quick-link">Категории</a>
         <a href="{{ route('admin.cars') }}"            class="quick-link">Марки и модели</a>
+        <a href="{{ route('admin.pricing-tiers.index') }}" class="quick-link">Уровень ценообразования</a>
     </div>
 
     <form method="GET" class="toolbar">
@@ -55,20 +56,58 @@
         </div>
         <table class="data-table">
             <thead>
-            <tr>
-                <th>ID</th><th>Название</th><th>SKU</th><th>Категория</th>
-                <th>Бренд</th><th>Цена</th><th>Кол-во</th><th>Статус</th><th>Действия</th>
-            </tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>SKU</th>
+            <th>Категория</th>
+            <th>Бренд</th>
+            <th>Цена</th>
+            <th>Кол-во</th>
+            <th>Статус</th>
+            <th>Действия</th>
             </thead>
             <tbody>
             @forelse($products as $product)
+                @php
+                    $user = auth()->user();
+                    $originalPrice = $product->price;
+                    $finalPrice = $product->getPriceForUser($user);
+                    $hasDiscount = $product->hasSpecialPriceForUser($user);
+                    $discountInfo = $product->getDiscountForUser($user);
+                @endphp
                 <tr>
                     <td class="td-id">{{ $product->id }}</td>
-                    <td class="td-name">{{ $product->name }}</td>
+                    <td class="td-name">
+                        {{ $product->name }}
+                        @if($hasDiscount && $discountInfo)
+                            <span class="tier-badge" title="Специальная цена для {{ $discountInfo['tier_name'] }}">
+                                {{ $discountInfo['tier_name'] }}
+                            </span>
+                            <span class="discount-badge">
+                                @if($discountInfo['type'] === 'percentage')
+                                    -{{ $discountInfo['percent'] }}%
+                                @else
+                                    -{{ number_format($discountInfo['amount'], 0) }} դր.
+                                @endif
+                            </span>
+                        @endif
+                    </td>
                     <td class="td-sku">{{ $product->sku }}</td>
                     <td>{{ $product->category->name }}</td>
                     <td>{{ $product->brand ?? '—' }}</td>
-                    <td>{{ $product->formattedPrice() }}</td>
+                    <td class="price-cell">
+                        <div class="price-wrapper">
+                            @if($hasDiscount)
+                                <div class="price-original">{{ number_format($originalPrice, 0) }} դր.</div>
+                                <div class="price-special">{{ number_format($finalPrice, 0) }} դր.</div>
+                                <div class="admin-price-info">
+                                    Экономия: {{ number_format($originalPrice - $finalPrice, 0) }} դր.
+                                </div>
+                            @else
+                                <div class="price-regular">{{ number_format($originalPrice, 0) }} դր.</div>
+                            @endif
+                        </div>
+                    </td>
                     <td>{{ $product->quantity }}</td>
                     <td>
                         @if(!$product->is_active)

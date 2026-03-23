@@ -3,7 +3,7 @@
 @section('title', 'Заказ оформлен — AVAMotors')
 
 @push('styles')
-    @vite(['resources/css/orders-front.css'])
+    @vite(['resources/css/orders.css'])
 @endpush
 
 @section('content')

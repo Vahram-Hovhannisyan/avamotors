@@ -42,7 +42,61 @@
             <div class="stat-label">Нет в наличии</div>
             <div class="stat-value">{{ $stats['out_stock'] }}</div>
         </a>
+        <a href="{{ route('admin.pricing-tiers.index') }}" class="stat-card">
+            <div class="stat-label">Уровни ценообразования</div>
+            <div class="stat-value">{{ $stats['pricing_tiers_count'] ?? 0 }}</div>
+        </a>
     </div>
+
+    {{-- Pricing Tiers Statistics --}}
+    @if(isset($pricingStats) && $pricingStats['total_tiers'] > 0)
+        <div class="pricing-stats">
+            <div class="pricing-stats-header">
+                <div class="pricing-stats-title">
+                    🎯 Статистика ценообразования
+                </div>
+                <a href="{{ route('admin.pricing-tiers.index') }}" style="font-size: 13px; color: #3b82f6;">
+                    Управление уровнями →
+                </a>
+            </div>
+            <div class="pricing-stats-grid">
+                <div class="pricing-stat-card">
+                    <div class="pricing-stat-label">Всего уровней</div>
+                    <div class="pricing-stat-value">{{ $pricingStats['total_tiers'] }}</div>
+                    <div class="pricing-stat-sub">
+                        Активных: {{ $pricingStats['active_tiers'] }}
+                    </div>
+                </div>
+                <div class="pricing-stat-card">
+                    <div class="pricing-stat-label">Пользователи с tier</div>
+                    <div class="pricing-stat-value">{{ $pricingStats['users_with_tiers'] }}</div>
+                    <div class="pricing-stat-sub">
+                        {{ $pricingStats['users_percentage'] }}% от всех пользователей
+                    </div>
+                </div>
+                <div class="pricing-stat-card">
+                    <div class="pricing-stat-label">Товары со скидкой*</div>
+                    <div class="pricing-stat-value">{{ $pricingStats['products_with_discount'] }}</div>
+                    <div class="discount-stat">
+                        Для текущего администратора
+                    </div>
+                </div>
+                <div class="pricing-stat-card">
+                    <div class="pricing-stat-label">Средняя скидка</div>
+                    <div class="pricing-stat-value">
+                        @if($pricingStats['average_discount_percent'] > 0)
+                            {{ $pricingStats['average_discount_percent'] }}%
+                        @else
+                            —
+                        @endif
+                    </div>
+                    <div class="pricing-stat-sub">
+                        По всем активным уровням
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="tabs">
         <button class="tab-btn active" data-tab="products">

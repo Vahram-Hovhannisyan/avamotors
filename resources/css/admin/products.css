@@ -232,3 +232,56 @@
 .car-search-input:focus { border-color:var(--brand); }
 .clear-models-btn { font-size:0.65rem; color:var(--muted); background:none; border:1px solid var(--border); padding:0.15rem 0.6rem; cursor:pointer; margin-left:auto; transition:all 0.2s; }
 .clear-models-btn:hover { border-color:#e53e3e; color:#e53e3e; }
+
+.price-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.price-original {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.price-special {
+    font-weight: 600;
+    color: #10b981;
+}
+
+.price-regular {
+    font-weight: 500;
+    color: #374151;
+}
+
+.tier-badge {
+    display: inline-block;
+    background: #8b5cf6;
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+.discount-badge {
+    display: inline-block;
+    background: #ef4444;
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+
+.price-cell {
+    min-width: 120px;
+}
+
+.admin-price-info {
+    font-size: 0.7rem;
+    color: #6b7280;
+    margin-top: 2px;
+}

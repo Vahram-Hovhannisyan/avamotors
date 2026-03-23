@@ -15,6 +15,7 @@ export default defineConfig({
                 'resources/css/admin/products.css',
                 'resources/css/admin/dashboard.css',
                 'resources/css/admin/users.css',
+                'resources/css/admin/pricing-tiers.css',
                 'resources/js/admin/cars-index.js',
                 'resources/js/admin/categories.js',
                 'resources/js/catalog.js',
@@ -25,6 +26,8 @@ export default defineConfig({
                 'resources/css/orders.css',
                 'resources/js/admin/products.js',
                 'resources/js/admin/dashboard.js',
+                'resources/js/cart.js',
+                'resources/js/admin/pricing-tiers.js'
             ],
             refresh: true,
         }),

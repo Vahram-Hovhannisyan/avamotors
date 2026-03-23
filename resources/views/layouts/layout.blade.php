@@ -18,6 +18,7 @@
     <!-- End Google Tag Manager -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'AVAMotors')</title>
 
@@ -152,6 +153,7 @@
                     <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
                 </svg>
                 Корзина
+                <span class="cart-badge" id="cart-badge" style="display: none;">0</span>
             </a>
         </div>
     </div>
@@ -237,11 +239,42 @@
     </div>
     <div class="footer-bottom">
         <span>© {{ date('Y') }} AVAMotors. Все права защищены.</span>
-        <span>Ереван, Армения</span>
+        <span>Раздан, Армения</span>
     </div>
 </footer>
 
+{{-- Сначала загружаем все скрипты из компонентов --}}
 @stack('scripts')
+
+{{-- Затем основной скрипт корзины --}}
+@vite(['resources/js/cart.js'])
+
+{{-- Глобальная инициализация --}}
+<script>
+    // Ждем загрузки всех скриптов
+    document.addEventListener('DOMContentLoaded', function() {
+        // Добавляем CSRF токен во все формы
+        const token = document.querySelector('meta[name="csrf-token"]');
+        if (token) {
+            document.querySelectorAll('form').forEach(form => {
+                if (!form.querySelector('input[name="_token"]')) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = '_token';
+                    input.value = token.content;
+                    form.appendChild(input);
+                }
+            });
+        }
+
+        // Инициализируем корзину, если cartManager доступен
+        if (window.cartManager && typeof window.cartManager.updateBadge === 'function') {
+            window.cartManager.updateBadge();
+        } else if (typeof window.updateCartBadge === 'function') {
+            window.updateCartBadge();
+        }
+    });
+</script>
 
 </body>
 </html>

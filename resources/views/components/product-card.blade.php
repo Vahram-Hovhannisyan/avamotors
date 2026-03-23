@@ -1,5 +1,14 @@
 @props(['product', 'showCategory' => true, 'compact' => false])
 
+@php
+    // Get pricing information
+    $user = auth()->user();
+    $originalPrice = $product->price;
+    $finalPrice = $product->final_price ?? $product->getPriceForUser($user);
+    $hasDiscount = $product->has_discount ?? $product->hasSpecialPriceForUser($user);
+    $discountInfo = $product->discount_info ?? $product->getDiscountForUser($user);
+@endphp
+
 @push('styles')
     <style>
         .product-card {
@@ -18,7 +27,7 @@
             transform: translateY(-2px);
         }
 
-        /* ── Badge ── */
+        /* ── Badges ── */
         .product-badge {
             position: absolute;
             top: 0.6rem;
@@ -34,6 +43,13 @@
         .product-badge.low {
             background: rgba(237, 137, 54, 0.15);
             color: #ed8936;
+        }
+
+        .product-badge.discount {
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            left: auto;
+            right: 0.6rem;
         }
 
         /* ── Body ── */
@@ -87,6 +103,43 @@
             text-transform: uppercase;
         }
 
+        /* ── Price Styles ── */
+        .product-price-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .product-price {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            letter-spacing: 0.04em;
+            color: var(--brand);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .product-price-old {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-decoration: line-through;
+            white-space: nowrap;
+        }
+
+        .product-price-saved {
+            font-size: 0.65rem;
+            color: #10b981;
+            white-space: nowrap;
+        }
+
+        .product-card.is-compact .product-price {
+            font-size: 1rem;
+        }
+
+        .product-card.is-compact .product-price-old {
+            font-size: 0.7rem;
+        }
+
         /* ── Footer ── */
         .product-footer {
             display: flex;
@@ -98,24 +151,35 @@
             border-top: 1px solid var(--border);
         }
 
-        .product-price {
-            font-family: var(--font-display);
-            font-size: 1.15rem;
-            letter-spacing: 0.04em;
-            color: var(--ink);
-            white-space: nowrap;
-        }
-
-        .product-card.is-compact .product-price {
-            font-size: 1rem;
+        /* Tier Badge */
+        .product-tier-badge {
+            font-size: 0.6rem;
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 0.25rem;
         }
     </style>
 @endpush
 
 <div class="product-card {{ $compact ? 'is-compact' : '' }}">
 
+    {{-- Stock badge --}}
     @if($product->quantity > 0 && $product->quantity < 5)
         <span class="product-badge low">Мало</span>
+    @endif
+
+    {{-- Discount badge --}}
+    @if($hasDiscount && $discountInfo)
+        <span class="product-badge discount">
+            @if($discountInfo['type'] === 'percentage')
+                -{{ $discountInfo['percent'] }}%
+            @else
+                -{{ number_format($discountInfo['amount'], 0) }} դր.
+            @endif
+        </span>
     @endif
 
     <x-product-image :product="$product" :size="$compact ? 'sm' : 'md'" />
@@ -138,8 +202,27 @@
 
         <x-stock-badge :product="$product" />
 
+        {{-- Tier info if applicable --}}
+        @if($hasDiscount && $discountInfo && isset($discountInfo['tier_name']))
+            <div class="product-tier-badge">
+                {{ $discountInfo['tier_name'] }}
+            </div>
+        @endif
+
         <div class="product-footer">
-            <span class="product-price">{{ $product->formattedPrice() }}</span>
+            <div class="product-price-wrapper">
+                @if($hasDiscount)
+                    <div class="product-price-old">{{ number_format($originalPrice, 0) }} դր.</div>
+                    <div class="product-price">{{ number_format($finalPrice, 0) }} դր.</div>
+                    @if($discountInfo && $discountInfo['type'] === 'fixed')
+                        <div class="product-price-saved">
+                            Экономия {{ number_format($discountInfo['amount'], 0) }} դր.
+                        </div>
+                    @endif
+                @else
+                    <div class="product-price">{{ number_format($finalPrice, 0) }} դր.</div>
+                @endif
+            </div>
             <x-add-to-cart-button :product="$product" />
         </div>
 

@@ -172,3 +172,206 @@
     .order-card-item        { flex-direction:column; gap:0.1rem; }
     .order-card-item-meta   { font-size:0.78rem; }
 }
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+}
+
+.order-item.has-discount {
+    background: rgba(72, 187, 120, 0.05);
+    margin: 0 -1rem;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.order-item-info {
+    flex: 1;
+}
+
+.order-item-name {
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+}
+
+.order-item-sku {
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
+.order-item-discount-badge {
+    display: inline-block;
+    background: #48bb78;
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+.tier-name {
+    font-size: 0.6rem;
+    opacity: 0.9;
+    margin-left: 4px;
+}
+
+.order-item-price-wrapper {
+    text-align: right;
+    min-width: 140px;
+}
+
+.order-item-quantity {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.price-with-discount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    margin-bottom: 6px;
+}
+
+.current-price {
+    font-weight: 600;
+    color: var(--brand);
+    font-size: 1rem;
+}
+
+.old-price {
+    font-size: 0.7rem;
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.regular-price {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.item-subtotal {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--ink);
+}
+
+.item-savings {
+    font-size: 0.7rem;
+    color: #48bb78;
+    margin-top: 4px;
+}
+
+/* Сводка по скидкам */
+.order-discount-summary {
+    background: rgba(72, 187, 120, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.discount-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.discount-row.savings {
+    color: #48bb78;
+    font-weight: 600;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(72, 187, 120, 0.2);
+    margin-top: 0.5rem;
+}
+
+.discount-tier-info {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Итоговая сумма */
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem 0;
+    margin-top: 1rem;
+    border-top: 2px solid var(--brand);
+}
+
+.total-wrapper {
+    text-align: right;
+}
+
+.total-original {
+    display: block;
+    font-size: 0.8rem;
+    text-decoration: line-through;
+    color: var(--muted);
+    font-weight: normal;
+    margin-bottom: 4px;
+}
+
+.total-final {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brand);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .order-item {
+        flex-direction: column;
+    }
+
+    .order-item-price-wrapper {
+        text-align: left;
+        min-width: auto;
+    }
+
+    .price-with-discount {
+        align-items: flex-start;
+    }
+
+    .order-item-quantity {
+        margin-bottom: 8px;
+    }
+
+    .order-item-name {
+        font-size: 0.9rem;
+    }
+
+    .total-final {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .order-discount-summary {
+        padding: 0.75rem;
+    }
+
+    .discount-row {
+        font-size: 0.8rem;
+    }
+
+    .discount-tier-info {
+        font-size: 0.7rem;
+    }
+
+    .order-total {
+        font-size: 1rem;
+    }
+}

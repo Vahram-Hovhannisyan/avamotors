@@ -449,3 +449,60 @@
 * {
     box-sizing: border-box;
 }
+
+
+/* Additional styles for pricing tiers */
+.product-price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+}
+
+.product-price-big {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brand);
+    line-height: 1.2;
+}
+
+.product-price-old {
+    font-size: 1.25rem;
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.discount-badge-large {
+    display: inline-block;
+    background: #ef4444;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.tier-info {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #8b5cf6;
+}
+
+.savings-info {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #10b981;
+}
+
+.original-price-info {
+    font-size: 0.9rem;
+    color: var(--muted);
+}

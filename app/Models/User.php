@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Mail\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
@@ -58,5 +59,19 @@ class User extends Authenticatable implements MustVerifyEmail
         Mail::to($this->email)->send(
             new VerifyEmail($verifyUrl, $this->name)
         );
+    }
+
+    public function pricingTiers(): BelongsToMany
+    {
+        return $this->belongsToMany(PricingTier::class, 'pricing_tier_user')
+            ->withTimestamps();
+    }
+
+// Метод для получения активного pricing tier пользователя
+    public function getActivePricingTier(): ?PricingTier
+    {
+        return $this->pricingTiers()
+            ->where('is_active', true)
+            ->first();
     }
 }

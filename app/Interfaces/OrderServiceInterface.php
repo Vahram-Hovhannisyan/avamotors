@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 interface OrderServiceInterface
 {
     /**
-     * Create order from cart
+     * Create order from cart with pricing tiers support
      */
-    public function createOrder(Request $request, ?User $user): Order;
+    public function createOrder(Request $request, ?User $user, array $cartData = []): Order;
 
     /**
      * Get paginated orders for a user

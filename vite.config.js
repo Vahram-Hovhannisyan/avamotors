@@ -24,6 +24,7 @@ export default defineConfig({
                 'resources/css/catalog.css',
                 'resources/css/welcome.css',
                 'resources/css/orders.css',
+                'resources/css/vin.css',
                 'resources/js/admin/products.js',
                 'resources/js/admin/dashboard.js',
                 'resources/js/cart.js',

@@ -734,3 +734,52 @@
         font-size: 0.55rem;
     }
 }
+
+/* Блок предупреждения для гостей */
+.cart-guest-warning {
+    background: linear-gradient(135deg, #fff8e7 0%, #fff3d6 100%);
+    border-left: 4px solid #f5a623;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 20px 0 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.warning-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.warning-content strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #b86b1a;
+    margin-bottom: 4px;
+}
+
+.warning-content p {
+    font-size: 13px;
+    color: #8b6b3c;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Темная тема (если есть) */
+@media (prefers-color-scheme: dark) {
+    .cart-guest-warning {
+        background: linear-gradient(135deg, #2a2418 0%, #241f14 100%);
+        border-left-color: #e68a2e;
+    }
+
+    .warning-content strong {
+        color: #f5a623;
+    }
+
+    .warning-content p {
+        color: #b89a6a;
+    }
+}

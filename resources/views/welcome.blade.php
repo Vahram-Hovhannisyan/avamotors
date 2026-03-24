@@ -21,6 +21,9 @@
             </p>
             <div class="hero-actions">
                 <a href="{{ route('catalog') }}" class="hero-btn hero-btn-white">Перейти в каталог</a>
+                <a href="{{ route('vin.index') }}" class="hero-btn hero-btn-vin">
+                    <span class="vin-icon">🔍</span> Подбор по VIN
+                </a>
                 <a href="{{ route('catalog') }}?q=" class="hero-btn hero-btn-ghost">Подбор по авто</a>
             </div>
             <div class="hero-stats">
@@ -172,6 +175,23 @@
         @endforeach
     </div>
 
+    {{-- ── VIN BANNER (Feature) ── --}}
+    <div class="vin-feature-banner">
+        <div class="vin-feature-icon">🔍🔢</div>
+        <div class="vin-feature-content">
+            <h3>Точный подбор по VIN номеру</h3>
+            <p>Введите 17-значный VIN — мы найдём запчасти, которые идеально подходят для вашего автомобиля</p>
+            <div class="vin-feature-example">
+                <span class="vin-example-badge">Пример VIN</span>
+                <code>1HGBH41JXMN109186</code>
+            </div>
+        </div>
+        <a href="{{ route('vin.index') }}" class="vin-feature-btn">
+            Подобрать по VIN
+            <span class="btn-arrow">→</span>
+        </a>
+    </div>
+
     {{-- ── BRANDS ── --}}
     <div class="brands-strip">
         <div class="brands-label">Работаем с ведущими производителями</div>
@@ -228,11 +248,12 @@
                 <span>Вернём деньги если товар не подошёл</span>
             </div>
         </div>
-        <div class="info-item">
-            <div class="info-icon">📞</div>
+        <div class="info-item info-item-vin">
+            <div class="info-icon">🔍</div>
             <div class="info-text">
-                <strong>Поддержка 24/7</strong>
-                <span>Поможем подобрать запчасть под любой автомобиль</span>
+                <strong>Подбор по VIN</strong>
+                <span>Точный подбор запчастей по коду автомобиля</span>
+                <a href="{{ route('vin.index') }}" class="info-vin-link">Найти по VIN →</a>
             </div>
         </div>
     </div>

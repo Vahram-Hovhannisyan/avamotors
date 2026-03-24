@@ -1,0 +1,601 @@
+/* ===== VIN PAGE STYLES ===== */
+
+.vin-page {
+    max-width: 100%;
+    margin: 10px auto;
+    padding: 0 15px;
+}
+
+.vin-hero {
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.vin-hero h1 {
+    font-family: var(--font-display, inherit);
+    font-size: 26px;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+    color: var(--ink);
+}
+
+.vin-hero p {
+    color: var(--muted);
+    font-size: 15px;
+}
+
+/* Форма ввода VIN */
+.vin-form-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--brand);
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.vin-input-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.vin-input {
+    flex: 1;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-family: monospace;
+    text-transform: uppercase;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--ink);
+    transition: all 0.2s;
+}
+
+.vin-input:focus {
+    border-color: var(--brand);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.15);
+}
+
+.vin-btn {
+    background: var(--brand);
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.vin-btn:hover {
+    background: var(--brand-dk);
+    transform: translateY(-1px);
+}
+
+.vin-info {
+    margin-top: 20px;
+    padding: 12px;
+    background: var(--surface2);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.vin-example {
+    font-family: monospace;
+    background: var(--surface);
+    padding: 2px 8px;
+    border-radius: 5px;
+    color: var(--brand);
+    border: 1px solid var(--border);
+    font-size: 12px;
+}
+
+/* Виджет VIN в шапке */
+.vin-widget {
+    margin: 12px 0;
+    padding: 6px;
+    background: var(--surface2);
+    border-radius: 40px;
+    border: 1px solid var(--border);
+}
+
+.vin-widget-form {
+    display: flex;
+    gap: 6px;
+}
+
+.vin-widget-input {
+    flex: 1;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    font-family: monospace;
+    text-transform: uppercase;
+    font-size: 13px;
+    background: var(--surface);
+    color: var(--ink);
+}
+
+.vin-widget-input:focus {
+    border-color: var(--brand);
+    outline: none;
+}
+
+.vin-widget-btn {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+
+.vin-widget-btn:hover {
+    background: var(--brand-dk);
+}
+
+/* Баннер активного VIN */
+.vin-active-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.vin-active-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--brand);
+}
+
+.vin-banner-icon {
+    font-size: 32px;
+    background: var(--surface2);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+}
+
+.vin-banner-info {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink);
+}
+
+.vin-banner-info strong {
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-block;
+    margin-right: 8px;
+    color: var(--brand);
+}
+
+.vin-badge {
+    background: var(--brand);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: monospace;
+    margin-left: 8px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.compatible-badge {
+    background: var(--surface2);
+    color: var(--brand);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-left: 8px;
+    display: inline-block;
+    border: 1px solid var(--border);
+}
+
+.compatible-badge.empty {
+    background: var(--surface2);
+    color: var(--muted);
+}
+
+.vin-clear-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 6px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.vin-clear-btn:hover {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: white;
+}
+
+/* Промо карточка VIN */
+.vin-promo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.vin-promo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--brand);
+}
+
+.vin-promo-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.vin-promo-icon {
+    font-size: 36px;
+    background: var(--surface2);
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+}
+
+.vin-promo-text {
+    flex: 1;
+}
+
+.vin-promo-text h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--ink);
+}
+
+.vin-promo-text p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.vin-promo-example {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.example-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.vin-promo-example code {
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--brand);
+    border: 1px solid var(--border);
+}
+
+.vin-promo-btn {
+    background: var(--brand);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.vin-promo-btn:hover {
+    background: var(--brand-dk);
+    transform: translateX(2px);
+}
+
+/* Сообщения VIN */
+.vin-message {
+    padding: 10px 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    animation: slideDown 0.2s ease;
+    border: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.vin-message-icon {
+    font-size: 18px;
+}
+
+.vin-message-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    color: var(--ink);
+}
+
+.vin-message-close:hover {
+    opacity: 1;
+}
+
+.vin-success {
+    border-left: 3px solid #48bb78;
+}
+
+.vin-warning {
+    border-left: 3px solid var(--brand);
+}
+
+.vin-error {
+    border-left: 3px solid #e53e3e;
+}
+
+/* Страница результата VIN */
+.vin-result-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.vin-result-card {
+    background: var(--surface);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.vin-result-header {
+    background: linear-gradient(135deg, #2c3e50, #1a2a3a);
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.vin-result-header h1 {
+    font-size: 22px;
+}
+
+.vin-result-header .vin-code {
+    font-family: monospace;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 30px;
+    letter-spacing: 0.5px;
+}
+
+.vin-result-body {
+    padding: 24px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.info-item {
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+}
+
+.info-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.info-section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+}
+
+.info-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Карточка совместимых товаров */
+.compatible-card {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.compatible-count {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--brand);
+    margin-bottom: 4px;
+}
+
+.compatible-text {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* Кнопки действий */
+.vin-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.vin-btn-back,
+.vin-btn-catalog,
+.vin-btn-filter {
+    padding: 8px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vin-btn-back {
+    background: var(--brand);
+    color: white;
+}
+
+.vin-btn-back:hover {
+    background: var(--brand-dk);
+    transform: translateY(-1px);
+}
+
+.vin-btn-catalog {
+    background: #2c3e50;
+    color: white;
+}
+
+.vin-btn-catalog:hover {
+    background: #1a2a3a;
+    transform: translateY(-1px);
+}
+
+.vin-btn-filter {
+    background: var(--brand);
+    color: white;
+    padding: 10px 24px;
+    font-size: 14px;
+}
+
+.vin-btn-filter:hover {
+    background: var(--brand-dk);
+    transform: translateY(-1px);
+}
+
+/* Анимация */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .vin-result-body {
+        padding: 20px;
+    }
+
+    .vin-actions {
+        flex-direction: column;
+    }
+
+    .vin-actions a {
+        justify-content: center;
+    }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    .vin-result-header {
+        background: linear-gradient(135deg, #1a2a3a, #0f1724);
+    }
+
+    .vin-btn-catalog {
+        background: #2c3e50;
+    }
+
+    .vin-btn-catalog:hover {
+        background: #1a2a3a;
+    }
+}

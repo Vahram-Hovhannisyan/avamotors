@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\AnalogController;
 use App\Http\Controllers\Admin\CarController;
 
 // ── Public ────────────────────────────────────────────
-Route::get('/about', fn() => view('about'))->name('about');
+Route::get('/about', fn() => view('about.about'))->name('about');
 
 Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/lang/{locale}', function (string $locale) {
@@ -41,6 +41,12 @@ Route::prefix('cart')->name('cart.')->controller(CartController::class)->group(f
     Route::post('/remove',          'remove')->name('remove');
     Route::post('/clear',            'clear')->name('clear');
     Route::get('/count',            'count')->name('count'); // для AJAX
+});
+
+Route::prefix('vin')->name('vin.')->controller(\App\Http\Controllers\VinController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/decode', 'decode')->name('decode');
+    Route::post('/clear', 'clear')->name('clear');
 });
 
 

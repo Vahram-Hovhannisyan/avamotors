@@ -133,7 +133,7 @@
                             style="font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">
                             Режим работы
                         </div>
-                        <div style="font-size:0.88rem; color:var(--ink); line-height:1.6;">Пн–Вс: 9:30–21:30
+                        <div style="font-size:0.88rem; color:var(--ink); line-height:1.6;">Пн–Вс: 9:30–21:00
                         </div>
                     </div>
                 </div>

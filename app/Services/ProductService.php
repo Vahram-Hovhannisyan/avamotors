@@ -115,9 +115,13 @@ class ProductService implements ProductServiceInterface
         $make = isset($vehicle['make']) ? $this->normalizeString($vehicle['make']) : null;
         $model = isset($vehicle['model']) ? $this->normalizeString($vehicle['model']) : null;
         $trim = isset($vehicle['trim']) ? $this->normalizeString($vehicle['trim']) : null;
+        $engineModel = isset($vehicle['engine_model']) ? $this->normalizeString($vehicle['engine_model']) : null;
+        $displacement = isset($vehicle['displacement']) ? $this->normalizeString((string)$vehicle['displacement']) : null;
+        $fuelType = isset($vehicle['fuel_type']) ? $this->normalizeString($vehicle['fuel_type']) : null;
 
         $searchPatterns = [];
 
+        // Модель + Комплектация
         if ($model && $trim) {
             $searchPatterns[] = $model . $trim;
         }
@@ -130,23 +134,45 @@ class ProductService implements ProductServiceInterface
         if ($make && $model) {
             $searchPatterns[] = $make . $model;
         }
-        if ($make && $model && $trim) {
-            $searchPatterns[] = $make . $model . $trim;
+
+        // Поиск по двигателю
+        $enginePatterns = [];
+        if ($engineModel) {
+            $enginePatterns[] = $engineModel;
+        }
+        if ($displacement) {
+            $enginePatterns[] = $displacement;
         }
 
-        $searchPatterns = array_unique(array_filter($searchPatterns));
-
-        $query->where(function($q) use ($make, $searchPatterns) {
+        $query->where(function($q) use ($make, $searchPatterns, $enginePatterns, $fuelType) {
+            // 1. Проверка по brand
             if ($make) {
                 $q->whereRaw("REPLACE(LOWER(brand), ' ', '') LIKE ?", ["%{$make}%"]);
             }
 
+            // 2. Проверка по name и description
             if (!empty($searchPatterns)) {
                 foreach ($searchPatterns as $pattern) {
-                    $normalizedPattern = $pattern;
-                    $q->orWhereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$normalizedPattern}%"]);
-                    $q->orWhereRaw("REPLACE(LOWER(description), ' ', '') LIKE ?", ["%{$normalizedPattern}%"]);
+                    $q->orWhereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$pattern}%"]);
+                    $q->orWhereRaw("REPLACE(LOWER(description), ' ', '') LIKE ?", ["%{$pattern}%"]);
                 }
+            }
+
+            // 3. ✅ НОВОЕ: Проверка по двигателю (через связь)
+            if (!empty($enginePatterns)) {
+                $q->orWhereHas('engines', function($sub) use ($enginePatterns, $fuelType) {
+                    foreach ($enginePatterns as $pattern) {
+                        $sub->whereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$pattern}%"])
+                            ->orWhereRaw("REPLACE(LOWER(code), ' ', '') LIKE ?", ["%{$pattern}%"]);
+                    }
+                    if ($fuelType) {
+                        $sub->orWhereRaw("REPLACE(LOWER(fuel_type), ' ', '') LIKE ?", ["%{$fuelType}%"]);
+                    }
+                });
+            } elseif ($fuelType) {
+                $q->orWhereHas('engines', function($sub) use ($fuelType) {
+                    $sub->whereRaw("REPLACE(LOWER(fuel_type), ' ', '') LIKE ?", ["%{$fuelType}%"]);
+                });
             }
         });
     }

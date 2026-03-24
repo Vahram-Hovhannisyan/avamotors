@@ -87,8 +87,7 @@ class VinController extends Controller
                 return null;
             }
 
-            // Формируем массив с данными
-            $vehicleData = [
+            return [
                 'vin' => $vin,
                 'make' => $result['Make'] ?? null,
                 'model' => $result['Model'] ?? null,
@@ -96,20 +95,15 @@ class VinController extends Controller
                 'trim' => $result['Trim'] ?? null,
                 'engine_model' => $result['EngineModel'] ?? null,
                 'engine_cylinders' => $result['EngineCylinders'] ?? null,
+                'displacement' => $result['DisplacementL'] ?? null,
+                'engine_hp' => $result['EngineHP'] ?? null,
+                'engine_kw' => $result['EngineKW'] ?? null,
                 'fuel_type' => $result['FuelTypePrimary'] ?? null,
                 'drive_type' => $result['DriveType'] ?? null,
                 'body_class' => $result['BodyClass'] ?? null,
                 'manufacturer' => $result['Manufacturer'] ?? null,
                 'plant_country' => $result['PlantCountry'] ?? null,
-                'plant_city' => $result['PlantCity'] ?? null,
-                'vehicle_type' => $result['VehicleType'] ?? null,
             ];
-
-            // Удаляем пустые значения
-            return array_filter($vehicleData, function($value) {
-                return !is_null($value) && $value !== '' && $value !== 'Не определено';
-            });
-
         } catch (\Exception $e) {
             \Log::error('VIN decode error: ' . $e->getMessage());
             return null;

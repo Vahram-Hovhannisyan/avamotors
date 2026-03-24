@@ -19,4 +19,9 @@ class CarModel extends Model
     {
         return $this->belongsToMany(Product::class, 'product_car_model');
     }
+
+    public function engines()
+    {
+        return $this->hasMany(Engine::class);
+    }
 }

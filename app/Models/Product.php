@@ -113,6 +113,12 @@ class Product extends Model
         return $pricingTier && $pricingTier->applyPrice($this->price) != $this->price;
     }
 
+
+    public function engines()
+    {
+        return $this->belongsToMany(Engine::class);
+    }
+
     /**
      * Get discount information for user
      */

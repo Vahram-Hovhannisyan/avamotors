@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\EngineController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -159,4 +160,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::get('/orders/{order}/invoice/preview', [InvoiceController::class, 'preview'])
         ->name('orders.invoice.preview');
+
+    Route::resource('engines', EngineController::class)->except(['show']);
+    Route::get('engines/get-models/{make_id}', [EngineController::class, 'getModelsByMake'])->name('engines.get-models');
+    Route::get('engines/export/csv', [EngineController::class, 'export'])->name('engines.export');
+    Route::post('engines/import', [EngineController::class, 'import'])->name('engines.import');
 });

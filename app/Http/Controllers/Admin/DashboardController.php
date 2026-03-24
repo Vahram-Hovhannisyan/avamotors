@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Interfaces\AdminServiceInterface;
 use App\Models\Analog;
+use App\Models\Engine;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -29,12 +30,26 @@ class DashboardController extends Controller
         $totalAnalogs = Analog::count();
         $analogBrands = Analog::distinct()->orderBy('brand')->pluck('brand');
 
+        // ✅ НОВОЕ: Получаем статистику по двигателям
+        $totalEngines = Engine::count();
+        $recentEngines = Engine::with('carModel.carMake')
+            ->latest()
+            ->take(8)
+            ->get();
+
+        // Статистика по типам топлива
+        $fuelTypeStats = Engine::whereNotNull('fuel_type')
+            ->selectRaw('fuel_type, COUNT(*) as count')
+            ->groupBy('fuel_type')
+            ->orderByDesc('count')
+            ->get();
+
         $analogQuery = Analog::withCount('products');
         if ($request->filled('aq')) {
             $q = $request->aq;
             $analogQuery->where(fn($sq) =>
-                $sq->where('brand', 'like', "%$q%")
-                   ->orWhere('sku',   'like', "%$q%")
+            $sq->where('brand', 'like', "%$q%")
+                ->orWhere('sku',   'like', "%$q%")
             );
         }
         $analogList = $analogQuery->orderBy('brand')->orderBy('sku')->paginate(10);
@@ -105,7 +120,9 @@ class DashboardController extends Controller
             'totalAnalogs', 'analogBrands', 'analogList',
             // Аналитика
             'revenueDays', 'totalRevenue', 'totalOrders', 'avgOrder',
-            'topProducts', 'revenueByStatus', 'period'
+            'topProducts', 'revenueByStatus', 'period',
+            // Двигатели
+            'totalEngines', 'recentEngines', 'fuelTypeStats'
         ));
     }
 }

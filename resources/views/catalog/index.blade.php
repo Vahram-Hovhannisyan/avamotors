@@ -66,7 +66,7 @@
     @if(!session('vin_decoded'))
         <div class="vin-promo-card">
             <div class="vin-promo-content">
-                <div class="vin-promo-icon">🔍🔢</div>
+                <div class="vin-promo-icon">🔍</div>
                 <div class="vin-promo-text">
                     <h4>Точный подбор по VIN</h4>
                     <p>Введите VIN номер автомобиля — найдем запчасти, которые подходят именно вашему авто</p>

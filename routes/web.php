@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\EngineController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ use App\Http\Controllers\Admin\AnalogController;
 use App\Http\Controllers\Admin\CarController;
 
 // ── Public ────────────────────────────────────────────
-Route::get('/about', fn() => view('about'))->name('about');
+Route::get('/about', fn() => view('about.about'))->name('about');
 
 Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/lang/{locale}', function (string $locale) {
@@ -41,6 +42,12 @@ Route::prefix('cart')->name('cart.')->controller(CartController::class)->group(f
     Route::post('/remove',          'remove')->name('remove');
     Route::post('/clear',            'clear')->name('clear');
     Route::get('/count',            'count')->name('count'); // для AJAX
+});
+
+Route::prefix('vin')->name('vin.')->controller(\App\Http\Controllers\VinController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/decode', 'decode')->name('decode');
+    Route::post('/clear', 'clear')->name('clear');
 });
 
 
@@ -153,4 +160,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::get('/orders/{order}/invoice/preview', [InvoiceController::class, 'preview'])
         ->name('orders.invoice.preview');
+
+    Route::resource('engines', EngineController::class)->except(['show']);
+    Route::get('engines/get-models/{make_id}', [EngineController::class, 'getModelsByMake'])->name('engines.get-models');
+    Route::get('engines/export/csv', [EngineController::class, 'export'])->name('engines.export');
+    Route::post('engines/import', [EngineController::class, 'import'])->name('engines.import');
 });

@@ -10,6 +10,81 @@
 
     <x-flash-message />
 
+    {{-- В начале файла, после x-flash-message --}}
+
+    {{-- VIN успешный подбор (с товарами) --}}
+    @if(session('vin_success'))
+        <div class="vin-message vin-success">
+            <span class="vin-message-icon">✅</span>
+            <span>{{ session('vin_success') }}</span>
+            <button class="vin-message-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+    @endif
+
+    {{-- VIN предупреждение (авто найден, но товаров нет) --}}
+    @if(session('vin_warning'))
+        <div class="vin-message vin-warning">
+            <span class="vin-message-icon">⚠️</span>
+            <span>{{ session('vin_warning') }}</span>
+            <button class="vin-message-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+    @endif
+
+    {{-- VIN ошибка --}}
+    @if(session('vin_error'))
+        <div class="vin-message vin-error">
+            <span class="vin-message-icon">❌</span>
+            <span>{{ session('vin_error') }}</span>
+            <button class="vin-message-close" onclick="this.parentElement.remove()">✕</button>
+        </div>
+    @endif
+
+    {{-- Баннер активного VIN (с товарами или без) --}}
+    @if(session('vin_decoded') && session('selected_vehicle'))
+        <div class="vin-active-banner {{ session('vin_no_products') ? 'vin-no-products' : '' }}">
+            <div class="vin-banner-icon">📄</div>
+            <div class="vin-banner-info">
+                <strong>Подобрано для:</strong>
+                {{ session('selected_vehicle')['make'] ?? '?' }}
+                {{ session('selected_vehicle')['model'] ?? '?' }}
+                @if(session('selected_vehicle')['year'])
+                    ({{ session('selected_vehicle')['year'] }})
+                @endif
+                <span class="vin-badge">VIN: {{ substr(session('selected_vin'), 0) }}</span>
+
+                @if(session('compatible_products_count') > 0)
+                    <span class="compatible-badge">✓ {{ session('compatible_products_count') }} совместимых товаров</span>
+                @else
+                    <span class="compatible-badge empty">⚠️ Товаров пока нет</span>
+                @endif
+            </div>
+            <a href="{{ route('vin.clear') }}" class="vin-clear-btn">✕ Очистить</a>
+        </div>
+    @endif
+
+    {{-- VIN промо-блок (показывается только если нет активного VIN) --}}
+    @if(!session('vin_decoded'))
+        <div class="vin-promo-card">
+            <div class="vin-promo-content">
+                <div class="vin-promo-icon">🔍</div>
+                <div class="vin-promo-text">
+                    <h4>Точный подбор по VIN</h4>
+                    <p>Введите VIN номер автомобиля — найдем запчасти, которые подходят именно вашему авто</p>
+                    <div class="vin-promo-example">
+                        <span class="example-label">Пример:</span>
+                        <code>1HGBH41JXMN109186</code>
+                    </div>
+                </div>
+                <a href="{{ route('vin.index') }}" class="vin-promo-btn">
+                    Подобрать по VIN
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 8h10M9 4l4 4-4 4"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    @endif
+
     <div class="catalog-wrap">
 
         {{-- ── SIDEBAR ── --}}

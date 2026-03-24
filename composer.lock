@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf969a713724ba1caaf90ec885c262c2",
+    "content-hash": "54bbb9629e889c29c5af58b04a7e40aa",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2251,6 +2251,55 @@
                 }
             ],
             "time": "2026-01-15T06:54:53+00:00"
+        },
+        {
+            "name": "marcinjean/laravel-vpic",
+            "version": "1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarcinJean/laravel-vpic.git",
+                "reference": "aae9e47c5ec6a4c17e281de22c66d2dd60748af9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarcinJean/laravel-vpic/zipball/aae9e47c5ec6a4c17e281de22c66d2dd60748af9",
+                "reference": "aae9e47c5ec6a4c17e281de22c66d2dd60748af9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "^7.7|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "VPic": "MarcinJean\\LaravelVPic\\Facades\\VPic"
+                    },
+                    "providers": [
+                        "MarcinJean\\LaravelVPic\\LaravelVPicServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MarcinJean\\LaravelVPic\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel-native vPIC (NHTSA) VIN decoder with exception-based flow and idempotent persistence.",
+            "support": {
+                "issues": "https://github.com/MarcinJean/laravel-vpic/issues",
+                "source": "https://github.com/MarcinJean/laravel-vpic/tree/1.3.1"
+            },
+            "time": "2025-09-29T01:27:45+00:00"
         },
         {
             "name": "masterminds/html5",

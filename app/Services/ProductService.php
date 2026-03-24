@@ -13,9 +13,6 @@ use Illuminate\Support\Collection as SupportCollection;
 
 class ProductService implements ProductServiceInterface
 {
-    /**
-     * Get featured active products for the home page.
-     */
     public function getFeatured(int $limit = 8): Collection
     {
         return Product::with(['category', 'carModels.carMake'])
@@ -25,9 +22,6 @@ class ProductService implements ProductServiceInterface
             ->get();
     }
 
-    /**
-     * Build the catalog query and return all data needed for the view.
-     */
     public function getCatalog(Request $request, ?string $slug = null): array
     {
         $categories = Category::with('children')
@@ -36,7 +30,7 @@ class ProductService implements ProductServiceInterface
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
-        $category   = $slug
+        $category = $slug
             ? Category::where('slug', $slug)->firstOrFail()
             : null;
 
@@ -45,33 +39,38 @@ class ProductService implements ProductServiceInterface
         $query = Product::with(['category', 'carModels.carMake'])
             ->where('is_active', true);
 
-        // Category filter — include all descendants
         if ($category) {
             $descendantIds = $category->getDescendantIds();
             $allIds = array_merge([$category->id], $descendantIds);
             $query->whereIn('category_id', $allIds);
         }
 
-        // Car make filter
-        if ($request->filled('make')) {
-            $query->whereHas('carModels.carMake', fn($q) =>
-            $q->where('id', (int) $request->make)
-            );
+        // 🔥 VIN FILTER — если есть VIN, используем только его, игнорируем make/model из URL
+        $vinActive = session('vin_decoded') && session('selected_vehicle');
+
+        if ($vinActive) {
+            $vehicle = session('selected_vehicle');
+            $this->applyVinFilter($query, $vehicle);
+        } else {
+            // Обычные фильтры по марке/модели из формы
+            if ($request->filled('make')) {
+                $query->whereHas('carModels.carMake', fn($q) =>
+                $q->where('id', (int) $request->make)
+                );
+            }
+
+            if ($request->filled('model')) {
+                $query->whereHas('carModels', fn($q) =>
+                $q->where('id', (int) $request->model)
+                );
+            }
         }
 
-        // Car model filter
-        if ($request->filled('model')) {
-            $query->whereHas('carModels', fn($q) =>
-            $q->where('id', (int) $request->model)
-            );
-        }
-
-        // Brand filter
+        // Остальные фильтры (бренд, цена, наличие, поиск) работают всегда
         if ($request->filled('brand')) {
             $query->where('brand', $request->brand);
         }
 
-        // Price range
         if ($request->filled('price_min')) {
             $query->where('price', '>=', (float) $request->price_min);
         }
@@ -80,22 +79,20 @@ class ProductService implements ProductServiceInterface
             $query->where('price', '<=', (float) $request->price_max);
         }
 
-        // In stock only
         if ($request->boolean('in_stock')) {
             $query->where('quantity', '>', 0);
         }
 
-        // Full-text search
         if ($request->filled('q')) {
             $search = trim($request->string('q'));
             $query->where(fn($q) =>
-            $q->where('name',  'like', "%{$search}%")
-                ->orWhere('sku',   'like', "%{$search}%")
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%")
                 ->orWhere('brand', 'like', "%{$search}%")
             );
         }
 
-        // Sort
+        // Сортировка
         match ($request->get('sort')) {
             'price_asc'  => $query->orderBy('price', 'asc'),
             'price_desc' => $query->orderBy('price', 'desc'),
@@ -105,14 +102,94 @@ class ProductService implements ProductServiceInterface
         };
 
         $products = $query->paginate(12)->withQueryString();
-        $brands   = $this->getBrands($category?->id);
+        $brands = $this->getBrands($category?->id);
 
         return compact('products', 'categories', 'category', 'carMakes', 'brands');
     }
 
     /**
-     * Load all relations for a single product page.
+     * Применить фильтр по VIN к запросу (без compatible_for)
      */
+    public function applyVinFilter($query, array $vehicle): void
+    {
+        $make = isset($vehicle['make']) ? $this->normalizeString($vehicle['make']) : null;
+        $model = isset($vehicle['model']) ? $this->normalizeString($vehicle['model']) : null;
+        $trim = isset($vehicle['trim']) ? $this->normalizeString($vehicle['trim']) : null;
+        $engineModel = isset($vehicle['engine_model']) ? $this->normalizeString($vehicle['engine_model']) : null;
+        $displacement = isset($vehicle['displacement']) ? $this->normalizeString((string)$vehicle['displacement']) : null;
+        $fuelType = isset($vehicle['fuel_type']) ? $this->normalizeString($vehicle['fuel_type']) : null;
+
+        $searchPatterns = [];
+
+        // Модель + Комплектация
+        if ($model && $trim) {
+            $searchPatterns[] = $model . $trim;
+        }
+        if ($model) {
+            $searchPatterns[] = $model;
+        }
+        if ($trim) {
+            $searchPatterns[] = $trim;
+        }
+        if ($make && $model) {
+            $searchPatterns[] = $make . $model;
+        }
+
+        // Поиск по двигателю
+        $enginePatterns = [];
+        if ($engineModel) {
+            $enginePatterns[] = $engineModel;
+        }
+        if ($displacement) {
+            $enginePatterns[] = $displacement;
+        }
+
+        $query->where(function($q) use ($make, $searchPatterns, $enginePatterns, $fuelType) {
+            // 1. Проверка по brand
+            if ($make) {
+                $q->whereRaw("REPLACE(LOWER(brand), ' ', '') LIKE ?", ["%{$make}%"]);
+            }
+
+            // 2. Проверка по name и description
+            if (!empty($searchPatterns)) {
+                foreach ($searchPatterns as $pattern) {
+                    $q->orWhereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$pattern}%"]);
+                    $q->orWhereRaw("REPLACE(LOWER(description), ' ', '') LIKE ?", ["%{$pattern}%"]);
+                }
+            }
+
+            // 3. ✅ НОВОЕ: Проверка по двигателю (через связь)
+            if (!empty($enginePatterns)) {
+                $q->orWhereHas('engines', function($sub) use ($enginePatterns, $fuelType) {
+                    foreach ($enginePatterns as $pattern) {
+                        $sub->whereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$pattern}%"])
+                            ->orWhereRaw("REPLACE(LOWER(code), ' ', '') LIKE ?", ["%{$pattern}%"]);
+                    }
+                    if ($fuelType) {
+                        $sub->orWhereRaw("REPLACE(LOWER(fuel_type), ' ', '') LIKE ?", ["%{$fuelType}%"]);
+                    }
+                });
+            } elseif ($fuelType) {
+                $q->orWhereHas('engines', function($sub) use ($fuelType) {
+                    $sub->whereRaw("REPLACE(LOWER(fuel_type), ' ', '') LIKE ?", ["%{$fuelType}%"]);
+                });
+            }
+        });
+    }
+
+    private function normalizeString($string)
+    {
+        if (empty($string)) {
+            return '';
+        }
+
+        $normalized = preg_replace('/\s+/', '', trim($string));
+        $normalized = mb_strtolower($normalized);
+        $normalized = preg_replace('/[^a-zа-яё0-9]/u', '', $normalized);
+
+        return $normalized;
+    }
+
     public function getProduct(Product $product): array
     {
         abort_if(!$product->is_active, 404);
@@ -135,9 +212,6 @@ class ProductService implements ProductServiceInterface
         return compact('product', 'related', 'fitsByMake', 'category');
     }
 
-    /**
-     * Get available brands for the filter sidebar.
-     */
     public function getBrands(?int $categoryId = null): SupportCollection
     {
         $query = Product::where('is_active', true)

@@ -172,6 +172,17 @@
                     </div>
                 </div>
 
+                {{-- Блок предупреждения для неавторизованных пользователей --}}
+                @guest
+                    <div class="cart-guest-warning">
+                        <div class="warning-icon">🔒</div>
+                        <div class="warning-content">
+                            <strong>Ваши товары сохранятся</strong>
+                            <p>После входа в аккаунт все товары в корзине останутся. Вы можете спокойно войти или зарегистрироваться — добавленные позиции никуда не денутся.</p>
+                        </div>
+                    </div>
+                @endguest
+
                 @auth
                     <a href="{{ route('orders.checkout') }}" class="checkout-btn">Оформить заказ</a>
                 @else
@@ -183,9 +194,3 @@
     @endif
 
 @endsection
-
-@push('styles')
-    <style>
-
-    </style>
-@endpush

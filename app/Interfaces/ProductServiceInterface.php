@@ -3,7 +3,7 @@
 namespace App\Interfaces;
 
 use App\Models\Product;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
@@ -29,4 +29,13 @@ interface ProductServiceInterface
      * Get available brands, optionally filtered by category.
      */
     public function getBrands(?int $categoryId = null): \Illuminate\Support\Collection;
+
+    /**
+     * Apply VIN filter to the product query.
+     *
+     * @param Builder $query
+     * @param array $vehicle
+     * @return void
+     */
+    public function applyVinFilter($query, array $vehicle): void;
 }

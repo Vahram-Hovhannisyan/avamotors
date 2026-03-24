@@ -20,7 +20,8 @@
         <a href="{{ route('admin.products.create') }}" class="quick-link primary">+ Добавить товар</a>
         <a href="{{ route('admin.categories') }}"      class="quick-link">Категории</a>
         <a href="{{ route('admin.cars') }}"            class="quick-link">Марки и модели</a>
-        <a href="{{ route('admin.pricing-tiers.index') }}" class="quick-link">Уровень ценообразования</a>
+        <a href="{{ route('admin.pricing-tiers.index') }}" class="quick-link">💰 Уровни цен</a>
+        <a href="{{ route('admin.engines.index') }}"   class="quick-link">🔧 Двигатели</a>
     </div>
 
     <form method="GET" class="toolbar">

@@ -117,6 +117,78 @@
                             @endforeach
                         </div>
                     </div>
+
+                    {{-- ✅ НОВЫЙ БЛОК: Двигатели --}}
+                    <div class="form-card">
+                        <div class="form-card-title">
+                            🔧 Совместимые двигатели
+                            <button type="button" id="clearAllEngines" class="clear-models-btn" style="background: #ef4444;">Сбросить всё</button>
+                        </div>
+                        <div class="cars-search-wrap">
+                            <input type="text" id="engineSearch" placeholder="Поиск двигателя по названию или коду..." class="cars-search-input">
+                            <span class="cars-selected-count" id="enginesSelectedCount"></span>
+                        </div>
+                        <div class="makes-accordion engines-accordion">
+                            @foreach($carMakes as $make)
+                                @php
+                                    $makeEngines = $engines->where('carModel.car_make_id', $make->id);
+                                    $selectedEngineCount = $makeEngines->filter(fn($e) =>
+                                        $product->engines->contains($e->id) || in_array($e->id, old('engines', []))
+                                    )->count();
+                                @endphp
+                                @if($makeEngines->count() > 0)
+                                    <div class="make-group engine-group {{ $selectedEngineCount > 0 ? 'open' : '' }}" data-make="{{ strtolower($make->name) }}">
+                                        <div class="make-accordion-trigger {{ $selectedEngineCount > 0 ? 'has-selected' : '' }}" data-target="engine-make-{{ $make->id }}">
+                                            <span class="make-accordion-name">{{ $make->name }}</span>
+                                            <span class="make-accordion-meta">
+                                                <span class="make-model-count">{{ $makeEngines->count() }} двиг.</span>
+                                                <span class="make-selected-badge engine-badge" id="engine-badge-{{ $make->id }}" {{ $selectedEngineCount === 0 ? 'style="display:none"' : '' }}>{{ $selectedEngineCount }}</span>
+                                            </span>
+                                            <span class="make-accordion-arrow">
+                                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="2,3.5 5,6.5 8,3.5"/></svg>
+                                            </span>
+                                        </div>
+                                        <div class="models-list engine-models-list {{ $selectedEngineCount > 0 ? 'open' : '' }}" id="engine-make-{{ $make->id }}">
+                                            @foreach($makeEngines->groupBy('carModel.name') as $modelName => $modelEngines)
+                                                <div class="engine-model-group">
+                                                    <div class="engine-model-title">{{ $modelName }}</div>
+                                                    @foreach($modelEngines as $engine)
+                                                        <label class="model-check engine-check" data-engine="{{ strtolower($engine->name) }} {{ strtolower($engine->code ?? '') }}">
+                                                            <input type="checkbox" name="engines[]" value="{{ $engine->id }}" data-make-id="{{ $make->id }}"
+                                                                {{ $product->engines->contains($engine->id) || in_array($engine->id, old('engines', [])) ? 'checked' : '' }}>
+                                                            <span>
+                                                                <strong>{{ $engine->name }}</strong>
+                                                                @if($engine->code)
+                                                                    <code class="engine-code">({{ $engine->code }})</code>
+                                                                @endif
+                                                                @if($engine->displacement)
+                                                                    <span class="engine-displacement">{{ $engine->displacement }}L</span>
+                                                                @endif
+                                                                @if($engine->horsepower)
+                                                                    <span class="engine-hp">{{ $engine->horsepower }} л.с.</span>
+                                                                @endif
+                                                                @if($engine->fuel_type)
+                                                                    <span class="engine-fuel">{{ $engine->fuel_type }}</span>
+                                                                @endif
+                                                            </span>
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        @if($engines->count() === 0)
+                            <div class="empty-state" style="padding: 20px; text-align: center; color: var(--muted);">
+                                <p>Нет добавленных двигателей</p>
+                                <a href="{{ route('admin.engines.create') }}" class="quick-link primary" style="display: inline-block; margin-top: 8px;">
+                                    + Создать двигатель
+                                </a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
 
                 {{-- RIGHT --}}
@@ -285,7 +357,6 @@
 
         </div>
     </div>
-
 @endsection
 
 @push('scripts')

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CarMake;
 use App\Models\CarModel;
 use App\Models\Engine;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class EngineController extends Controller
@@ -321,5 +322,21 @@ class EngineController extends Controller
 
         return redirect()->route('admin.engines.index')
             ->with('success', $message);
+    }
+
+    public function attach(Product $product, Engine $engine)
+    {
+        if (!$product->engines->contains($engine->id)) {
+            $product->engines()->attach($engine->id);
+        }
+
+        return redirect()->back()->with('success', 'Двигатель добавлен к товару');
+    }
+
+    public function detach(Product $product, Engine $engine)
+    {
+        $product->engines()->detach($engine->id);
+
+        return redirect()->back()->with('success', 'Двигатель удален из товара');
     }
 }

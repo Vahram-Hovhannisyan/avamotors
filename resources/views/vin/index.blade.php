@@ -27,9 +27,9 @@
                            pattern="[A-HJ-NPR-Z0-9]{17}"
                            title="VIN должен состоять из 17 символов (цифры и буквы A-Z, кроме I, O, Q)"
                            oninvalid="this.setCustomValidity('VIN должен содержать ровно 17 символов. Допустимы: A-Z (кроме I,O,Q) и 0-9')"
-                           oninput="this.setCustomValidity('')"
+                           oninput="this.setCustomValidity(''); this.value = this.value.toUpperCase();"
                            autocomplete="off"
-                           value="{{ old('vin') }}">
+                           value="{{ strtoupper(old('vin')) }}">
                     <button type="submit" class="vin-btn">Подобрать запчасти</button>
                 </div>
             </form>

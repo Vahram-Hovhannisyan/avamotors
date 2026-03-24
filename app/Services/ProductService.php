@@ -7,6 +7,7 @@ use App\Models\CarMake;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection as SupportCollection;
@@ -108,20 +109,21 @@ class ProductService implements ProductServiceInterface
     }
 
     /**
-     * Применить фильтр по VIN к запросу (без compatible_for)
+     * Apply VIN filter to the product query.
+     * Должен быть public, так как объявлен в интерфейсе
+     *
+     * @param Builder $query
+     * @param array $vehicle
+     * @return void
      */
     public function applyVinFilter($query, array $vehicle): void
     {
         $make = isset($vehicle['make']) ? $this->normalizeString($vehicle['make']) : null;
         $model = isset($vehicle['model']) ? $this->normalizeString($vehicle['model']) : null;
         $trim = isset($vehicle['trim']) ? $this->normalizeString($vehicle['trim']) : null;
-        $engineModel = isset($vehicle['engine_model']) ? $this->normalizeString($vehicle['engine_model']) : null;
-        $displacement = isset($vehicle['displacement']) ? $this->normalizeString((string)$vehicle['displacement']) : null;
-        $fuelType = isset($vehicle['fuel_type']) ? $this->normalizeString($vehicle['fuel_type']) : null;
 
         $searchPatterns = [];
 
-        // Модель + Комплектация
         if ($model && $trim) {
             $searchPatterns[] = $model . $trim;
         }
@@ -134,49 +136,30 @@ class ProductService implements ProductServiceInterface
         if ($make && $model) {
             $searchPatterns[] = $make . $model;
         }
-
-        // Поиск по двигателю
-        $enginePatterns = [];
-        if ($engineModel) {
-            $enginePatterns[] = $engineModel;
-        }
-        if ($displacement) {
-            $enginePatterns[] = $displacement;
+        if ($make && $model && $trim) {
+            $searchPatterns[] = $make . $model . $trim;
         }
 
-        $query->where(function($q) use ($make, $searchPatterns, $enginePatterns, $fuelType) {
-            // 1. Проверка по brand
+        $searchPatterns = array_unique(array_filter($searchPatterns));
+
+        $query->where(function($q) use ($make, $searchPatterns) {
             if ($make) {
                 $q->whereRaw("REPLACE(LOWER(brand), ' ', '') LIKE ?", ["%{$make}%"]);
             }
 
-            // 2. Проверка по name и description
             if (!empty($searchPatterns)) {
                 foreach ($searchPatterns as $pattern) {
-                    $q->orWhereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$pattern}%"]);
-                    $q->orWhereRaw("REPLACE(LOWER(description), ' ', '') LIKE ?", ["%{$pattern}%"]);
+                    $normalizedPattern = $pattern;
+                    $q->orWhereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$normalizedPattern}%"]);
+                    $q->orWhereRaw("REPLACE(LOWER(description), ' ', '') LIKE ?", ["%{$normalizedPattern}%"]);
                 }
-            }
-
-            // 3. ✅ НОВОЕ: Проверка по двигателю (через связь)
-            if (!empty($enginePatterns)) {
-                $q->orWhereHas('engines', function($sub) use ($enginePatterns, $fuelType) {
-                    foreach ($enginePatterns as $pattern) {
-                        $sub->whereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$pattern}%"])
-                            ->orWhereRaw("REPLACE(LOWER(code), ' ', '') LIKE ?", ["%{$pattern}%"]);
-                    }
-                    if ($fuelType) {
-                        $sub->orWhereRaw("REPLACE(LOWER(fuel_type), ' ', '') LIKE ?", ["%{$fuelType}%"]);
-                    }
-                });
-            } elseif ($fuelType) {
-                $q->orWhereHas('engines', function($sub) use ($fuelType) {
-                    $sub->whereRaw("REPLACE(LOWER(fuel_type), ' ', '') LIKE ?", ["%{$fuelType}%"]);
-                });
             }
         });
     }
 
+    /**
+     * Нормализация строки (убираем пробелы, приводим к нижнему регистру)
+     */
     private function normalizeString($string)
     {
         if (empty($string)) {
@@ -224,4 +207,6 @@ class ProductService implements ProductServiceInterface
 
         return $query->orderBy('brand')->pluck('brand');
     }
+
+
 }

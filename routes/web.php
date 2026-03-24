@@ -148,6 +148,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/products/{product}/analogs/{analog}',   [AnalogController::class, 'attach'])->name('products.analogs.attach');
     Route::delete('/products/{product}/analogs/{analog}', [AnalogController::class, 'detach'])->name('products.analogs.detach');
 
+    // Engines attach/detach to product
+    Route::post('/products/{product}/engines/{engine}', [\App\Http\Controllers\Admin\ProductController::class, 'attachEngine'])->name('products.engines.attach');
+    Route::delete('/products/{product}/engines/{engine}', [\App\Http\Controllers\Admin\ProductController::class, 'detachEngine'])->name('products.engines.detach');
 
     Route::resource('pricing-tiers', \App\Http\Controllers\Admin\PricingTierController::class);
     Route::post('pricing-tiers/{pricingTier}/bulk-assign', [\App\Http\Controllers\Admin\PricingTierController::class, 'bulkAssign'])->name('pricing-tiers.bulk-assign');

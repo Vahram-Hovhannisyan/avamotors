@@ -7,6 +7,7 @@ use App\Models\Analog;
 use App\Models\CarMake;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Engine; // ✅ Добавьте этот импорт
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -52,8 +53,9 @@ class ProductController extends Controller
     {
         $carMakes = CarMake::with('carModels')->orderBy('name')->get();
         $analogs  = Analog::orderBy('brand')->orderBy('sku')->limit(200)->get();
+        $engines  = Engine::with('carModel.carMake')->orderBy('name')->get();
 
-        return view('admin.products.create', compact('carMakes', 'analogs'));
+        return view('admin.products.create', compact('carMakes', 'analogs', 'engines'));
     }
 
     public function store(Request $request)
@@ -71,6 +73,8 @@ class ProductController extends Controller
             'car_models.*' => ['exists:car_models,id'],
             'analogs'      => ['nullable', 'array'],
             'analogs.*'    => ['exists:analogs,id'],
+            'engines'      => ['nullable', 'array'],
+            'engines.*'    => ['exists:engines,id'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
@@ -82,6 +86,7 @@ class ProductController extends Controller
         $product = Product::create($data);
         $product->carModels()->sync($data['car_models'] ?? []);
         $product->analogs()->sync($data['analogs'] ?? []);
+        $product->engines()->sync($data['engines'] ?? []);
 
         return redirect()->route('admin.products.edit', $product)
             ->with('success', "Товар «{$product->name}» создан.");
@@ -93,6 +98,12 @@ class ProductController extends Controller
         $carMakes = CarMake::with('carModels')->orderBy('name')->get();
         $analogs  = Analog::orderBy('brand')->orderBy('sku')->limit(200)->get();
 
+        // ✅ ДОБАВЬТЕ ЭТОТ БЛОК - получаем все двигатели
+        $engines = Engine::with('carModel.carMake')
+            ->orderBy('car_model_id')
+            ->orderBy('name')
+            ->get();
+
         $suggestions = Analog::whereNotIn('id', $product->analogs->pluck('id'))
             ->when(request('q'), fn($q, $s) =>
             $q->where(fn($sq) =>
@@ -103,7 +114,8 @@ class ProductController extends Controller
             ->orderBy('brand')->orderBy('sku')
             ->paginate(10);
 
-        return view('admin.products.edit', compact('product', 'carMakes', 'analogs', 'suggestions'));
+        // ✅ ДОБАВЬТЕ $engines В КОМПАКТ
+        return view('admin.products.edit', compact('product', 'carMakes', 'analogs', 'suggestions', 'engines'));
     }
 
     public function update(Request $request, Product $product)
@@ -121,6 +133,8 @@ class ProductController extends Controller
             'car_models.*' => ['exists:car_models,id'],
             'analogs'      => ['nullable', 'array'],
             'analogs.*'    => ['exists:analogs,id'],
+            'engines'      => ['nullable', 'array'],
+            'engines.*'    => ['exists:engines,id'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
@@ -138,6 +152,7 @@ class ProductController extends Controller
         $product->update($data);
         $product->carModels()->sync($data['car_models'] ?? []);
         $product->analogs()->sync($data['analogs'] ?? []);
+        $product->engines()->sync($data['engines'] ?? []);
 
         return redirect()->route('admin.products')
             ->with('success', "Товар «{$product->name}» обновлён.");
@@ -178,5 +193,21 @@ class ProductController extends Controller
         return redirect()
             ->route('admin.products.edit', $clone)
             ->with('success', "Товар «{$product->name}» клонирован. Проверьте данные и активируйте.");
+    }
+
+    public function attachEngine(Product $product, Engine $engine)
+    {
+        if (!$product->engines->contains($engine->id)) {
+            $product->engines()->attach($engine->id);
+        }
+
+        return back()->with('success', "Двигатель «{$engine->name}» добавлен к товару");
+    }
+
+    public function detachEngine(Product $product, Engine $engine)
+    {
+        $product->engines()->detach($engine->id);
+
+        return back()->with('success', "Двигатель удален из товара");
     }
 }

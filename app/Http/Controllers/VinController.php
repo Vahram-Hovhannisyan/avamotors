@@ -21,7 +21,7 @@ class VinController extends Controller
             'vin' => 'required|string|max:17|min:17'
         ]);
 
-        $vin = strtoupper(trim($request->vin));
+        $vin = strtoupper(mb_strtoupper(trim($request->vin)));
         $vin = preg_replace('/[\s\-]/', '', $vin);
 
         // Валидация формата VIN

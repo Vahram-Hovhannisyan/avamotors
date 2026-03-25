@@ -29,6 +29,21 @@ class EngineSeeder extends Seeder
             $yaris = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Yaris%')->first();
             $auris = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Auris%')->first();
             $avensis = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Avensis%')->first();
+            $alphard = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Alphard%')->first();
+            $estima = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Estima%')->first();
+            $previa = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Previa%')->first();
+            $matrix = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Matrix%')->first();
+            $scion = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Scion%')->first();
+            $solara = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Solara%')->first();
+            $wish = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Wish%')->first();
+            $celica = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Celica%')->first();
+            $mr2 = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%MR2%')->first();
+            $premio = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Premio%')->first();
+            $allion = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Allion%')->first();
+            $vista = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Vista%')->first();
+            $aygo = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Aygo%')->first();
+            $vitz = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Vitz%')->first();
+            $altezza = CarModel::where('car_make_id', $toyota->id)->where('name', 'LIKE', '%Altezza%')->first();
 
             $engines = [
                 // Camry
@@ -40,11 +55,15 @@ class EngineSeeder extends Seeder
                 // Corolla
                 ['car_model_id' => $corolla?->id, 'name' => '1.8L', 'code' => '2ZR-FE', 'displacement' => 1.8, 'horsepower' => 132, 'kw' => 98, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2006, 'year_to' => null],
                 ['car_model_id' => $corolla?->id, 'name' => '1.6L', 'code' => '1ZR-FE', 'displacement' => 1.6, 'horsepower' => 122, 'kw' => 91, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2006, 'year_to' => null],
+                ['car_model_id' => $corolla?->id, 'name' => '1.8L', 'code' => '1ZZ-FE', 'displacement' => 1.8, 'horsepower' => 132, 'kw' => 98, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2008],
+                ['car_model_id' => $corolla?->id, 'name' => '1.6L', 'code' => '3ZZ-FE', 'displacement' => 1.6, 'horsepower' => 110, 'kw' => 82, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2008],
                 ['car_model_id' => $corolla?->id, 'name' => '2.0L Hybrid', 'code' => '2ZR-FXE', 'displacement' => 1.8, 'horsepower' => 140, 'kw' => 104, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2018, 'year_to' => null],
                 ['car_model_id' => $corolla?->id, 'name' => '1.4L D-4D', 'code' => '1ND-TV', 'displacement' => 1.4, 'horsepower' => 90, 'kw' => 67, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2004, 'year_to' => 2013],
 
                 // RAV4
                 ['car_model_id' => $rav4?->id, 'name' => '2.0L', 'code' => '3ZR-FE', 'displacement' => 2.0, 'horsepower' => 146, 'kw' => 109, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2015],
+                ['car_model_id' => $rav4?->id, 'name' => '2.0L', 'code' => '1AZ-FE', 'displacement' => 2.0, 'horsepower' => 150, 'kw' => 112, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2005],
+                ['car_model_id' => $rav4?->id, 'name' => '2.4L', 'code' => '2AZ-FE', 'displacement' => 2.4, 'horsepower' => 166, 'kw' => 124, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2012],
                 ['car_model_id' => $rav4?->id, 'name' => '2.5L Hybrid', 'code' => 'A25A-FXS', 'displacement' => 2.5, 'horsepower' => 219, 'kw' => 163, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2018, 'year_to' => null],
                 ['car_model_id' => $rav4?->id, 'name' => '2.2L D-4D', 'code' => '2AD-FTV', 'displacement' => 2.2, 'horsepower' => 150, 'kw' => 112, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2005, 'year_to' => 2012],
 
@@ -58,7 +77,50 @@ class EngineSeeder extends Seeder
 
                 // Highlander
                 ['car_model_id' => $highlander?->id, 'name' => '3.5L V6', 'code' => '2GR-FKS', 'displacement' => 3.5, 'horsepower' => 295, 'kw' => 220, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2016, 'year_to' => null],
+                ['car_model_id' => $highlander?->id, 'name' => '2.4L', 'code' => '2AZ-FE', 'displacement' => 2.4, 'horsepower' => 160, 'kw' => 119, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2001, 'year_to' => 2007],
                 ['car_model_id' => $highlander?->id, 'name' => '2.5L Hybrid', 'code' => 'A25A-FXS', 'displacement' => 2.5, 'horsepower' => 243, 'kw' => 181, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2020, 'year_to' => null],
+
+                // Yaris / Vitz
+                ['car_model_id' => $yaris?->id, 'name' => '1.0L', 'code' => '1KR-FE', 'displacement' => 1.0, 'horsepower' => 68, 'kw' => 51, 'fuel_type' => 'Бензин', 'cylinders' => 3, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => null],
+                ['car_model_id' => $yaris?->id, 'name' => '1.3L', 'code' => '2NZ-FE', 'displacement' => 1.3, 'horsepower' => 87, 'kw' => 65, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 1999, 'year_to' => 2005],
+                ['car_model_id' => $yaris?->id, 'name' => '1.5L', 'code' => '1NZ-FE', 'displacement' => 1.5, 'horsepower' => 105, 'kw' => 78, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 1999, 'year_to' => 2005],
+
+                // Auris
+                ['car_model_id' => $auris?->id, 'name' => '1.6L', 'code' => '1ZR-FE', 'displacement' => 1.6, 'horsepower' => 122, 'kw' => 91, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2006, 'year_to' => 2018],
+                ['car_model_id' => $auris?->id, 'name' => '1.8L', 'code' => '2ZR-FE', 'displacement' => 1.8, 'horsepower' => 136, 'kw' => 101, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2006, 'year_to' => 2018],
+
+                // Avensis
+                ['car_model_id' => $avensis?->id, 'name' => '1.6L', 'code' => '1ZZ-FE', 'displacement' => 1.6, 'horsepower' => 110, 'kw' => 82, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2008],
+                ['car_model_id' => $avensis?->id, 'name' => '1.8L', 'code' => '1ZZ-FE', 'displacement' => 1.8, 'horsepower' => 129, 'kw' => 96, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2008],
+                ['car_model_id' => $avensis?->id, 'name' => '2.0L', 'code' => '1AZ-FE', 'displacement' => 2.0, 'horsepower' => 147, 'kw' => 110, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2008],
+                ['car_model_id' => $avensis?->id, 'name' => '2.4L', 'code' => '2AZ-FE', 'displacement' => 2.4, 'horsepower' => 163, 'kw' => 122, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2008],
+
+                // Alphard
+                ['car_model_id' => $alphard?->id, 'name' => '2.4L', 'code' => '2AZ-FE', 'displacement' => 2.4, 'horsepower' => 160, 'kw' => 119, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2002, 'year_to' => 2005],
+
+                // Estima / Previa
+                ['car_model_id' => $estima?->id, 'name' => '2.4L', 'code' => '2AZ-FE', 'displacement' => 2.4, 'horsepower' => 160, 'kw' => 119, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2005],
+
+                // Matrix
+                ['car_model_id' => $matrix?->id, 'name' => '1.8L', 'code' => '1ZZ-FE', 'displacement' => 1.8, 'horsepower' => 130, 'kw' => 97, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2008],
+                ['car_model_id' => $matrix?->id, 'name' => '2.4L', 'code' => '2AZ-FE', 'displacement' => 2.4, 'horsepower' => 158, 'kw' => 118, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2008],
+
+                // Wish
+                ['car_model_id' => $wish?->id, 'name' => '1.8L', 'code' => '1ZZ-FE', 'displacement' => 1.8, 'horsepower' => 132, 'kw' => 98, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2009],
+                ['car_model_id' => $wish?->id, 'name' => '2.0L', 'code' => '1AZ-FE', 'displacement' => 2.0, 'horsepower' => 150, 'kw' => 112, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2009],
+
+                // Celica
+                ['car_model_id' => $celica?->id, 'name' => '1.8L', 'code' => '1ZZ-FE', 'displacement' => 1.8, 'horsepower' => 140, 'kw' => 104, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2006],
+                ['car_model_id' => $celica?->id, 'name' => '1.8L', 'code' => '2ZZ-GE', 'displacement' => 1.8, 'horsepower' => 190, 'kw' => 142, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2006],
+
+                // MR2
+                ['car_model_id' => $mr2?->id, 'name' => '1.8L', 'code' => '1ZZ-FE', 'displacement' => 1.8, 'horsepower' => 140, 'kw' => 104, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2007],
+
+                // Altezza
+                ['car_model_id' => $altezza?->id, 'name' => '2.0L', 'code' => '3S-GE', 'displacement' => 2.0, 'horsepower' => 210, 'kw' => 157, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2001, 'year_to' => 2005],
+
+                // Aygo
+                ['car_model_id' => $aygo?->id, 'name' => '1.0L', 'code' => '1KR-FE', 'displacement' => 1.0, 'horsepower' => 68, 'kw' => 51, 'fuel_type' => 'Бензин', 'cylinders' => 3, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2020],
             ];
 
             foreach ($engines as $engine) {
@@ -79,6 +141,9 @@ class EngineSeeder extends Seeder
             $lx = CarModel::where('car_make_id', $lexus->id)->where('name', 'LIKE', '%LX%')->first();
             $ux = CarModel::where('car_make_id', $lexus->id)->where('name', 'LIKE', '%UX%')->first();
             $is = CarModel::where('car_make_id', $lexus->id)->where('name', 'LIKE', '%IS%')->first();
+            $ct = CarModel::where('car_make_id', $lexus->id)->where('name', 'LIKE', '%CT%')->first();
+            $hs = CarModel::where('car_make_id', $lexus->id)->where('name', 'LIKE', '%HS%')->first();
+            $gs = CarModel::where('car_make_id', $lexus->id)->where('name', 'LIKE', '%GS%')->first();
 
             $engines = [
                 // RX
@@ -89,6 +154,7 @@ class EngineSeeder extends Seeder
                 // ES
                 ['car_model_id' => $es?->id, 'name' => '3.5L V6', 'code' => '2GR-FKS', 'displacement' => 3.5, 'horsepower' => 302, 'kw' => 225, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2018, 'year_to' => null],
                 ['car_model_id' => $es?->id, 'name' => '2.5L Hybrid', 'code' => 'A25A-FXS', 'displacement' => 2.5, 'horsepower' => 215, 'kw' => 160, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2018, 'year_to' => null],
+                ['car_model_id' => $es?->id, 'name' => '3.3L V6', 'code' => '3MZ-FE', 'displacement' => 3.3, 'horsepower' => 225, 'kw' => 168, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2003, 'year_to' => 2006],
 
                 // NX
                 ['car_model_id' => $nx?->id, 'name' => '2.0L Turbo', 'code' => '8AR-FTS', 'displacement' => 2.0, 'horsepower' => 235, 'kw' => 175, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2014, 'year_to' => null],
@@ -97,6 +163,22 @@ class EngineSeeder extends Seeder
                 // LX
                 ['car_model_id' => $lx?->id, 'name' => '5.7L V8', 'code' => '3UR-FE', 'displacement' => 5.7, 'horsepower' => 383, 'kw' => 286, 'fuel_type' => 'Бензин', 'cylinders' => 8, 'turbo' => 'Атмосферный', 'year_from' => 2007, 'year_to' => 2021],
                 ['car_model_id' => $lx?->id, 'name' => '3.5L V6 Twin-Turbo', 'code' => 'V35A-FTS', 'displacement' => 3.5, 'horsepower' => 409, 'kw' => 305, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Твин-турбо', 'year_from' => 2021, 'year_to' => null],
+
+                // CT200h
+                ['car_model_id' => $ct?->id, 'name' => '1.8L Hybrid', 'code' => '2ZR-FXE', 'displacement' => 1.8, 'horsepower' => 134, 'kw' => 100, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2010, 'year_to' => 2020],
+
+                // HS250h
+                ['car_model_id' => $hs?->id, 'name' => '2.4L Hybrid', 'code' => '2AZ-FXE', 'displacement' => 2.4, 'horsepower' => 187, 'kw' => 139, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2009, 'year_to' => 2012],
+
+                // GS
+                ['car_model_id' => $gs?->id, 'name' => '3.0L V6', 'code' => '3GR-FE', 'displacement' => 3.0, 'horsepower' => 231, 'kw' => 172, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2011],
+                ['car_model_id' => $gs?->id, 'name' => '3.5L V6', 'code' => '2GR-FE', 'displacement' => 3.5, 'horsepower' => 303, 'kw' => 226, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2011],
+
+                // IS
+                ['car_model_id' => $is?->id, 'name' => '2.5L V6', 'code' => '4GR-FSE', 'displacement' => 2.5, 'horsepower' => 208, 'kw' => 155, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2015],
+                ['car_model_id' => $is?->id, 'name' => '3.5L V6', 'code' => '2GR-FSE', 'displacement' => 3.5, 'horsepower' => 306, 'kw' => 228, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2015],
+                ['car_model_id' => $is?->id, 'name' => '2.0L', 'code' => '1G-FE', 'displacement' => 2.0, 'horsepower' => 155, 'kw' => 116, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2005],
+                ['car_model_id' => $is?->id, 'name' => '3.0L', 'code' => '2JZ-GE', 'displacement' => 3.0, 'horsepower' => 215, 'kw' => 160, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2005],
             ];
 
             foreach ($engines as $engine) {
@@ -216,7 +298,7 @@ class EngineSeeder extends Seeder
         // ==================== NISSAN ====================
         if ($nissan) {
             $qashqai = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Qashqai%')->first();
-            $xterra = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%X-Terra%')->first();
+            $xterrain = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%X-Trail%')->first();
             $pathfinder = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Pathfinder%')->first();
             $patrol = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Patrol%')->first();
             $navara = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Navara%')->first();
@@ -225,7 +307,6 @@ class EngineSeeder extends Seeder
             $note = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Note%')->first();
             $almera = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Almera%')->first();
             $primera = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Primera%')->first();
-            $xterrain = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%X-Trail%')->first();
             $leaf = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Leaf%')->first();
             $gt_r = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%GT-R%')->first();
             $skyline = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Skyline%')->first();

@@ -16,6 +16,7 @@ class EngineSeeder extends Seeder
         $lexus = CarMake::where('name', 'LIKE', '%Lexus%')->first();
         $kia = CarMake::where('name', 'LIKE', '%Kia%')->first();
         $hyundai = CarMake::where('name', 'LIKE', '%Hyundai%')->first();
+        $nissan = CarMake::where('name', 'LIKE', '%Nissan%')->first();
 
         // ==================== TOYOTA ====================
         if ($toyota) {
@@ -200,6 +201,110 @@ class EngineSeeder extends Seeder
                 // Palisade
                 ['car_model_id' => $palisade?->id, 'name' => '3.8L V6', 'code' => 'G6DN', 'displacement' => 3.8, 'horsepower' => 291, 'kw' => 217, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2018, 'year_to' => null],
                 ['car_model_id' => $palisade?->id, 'name' => '2.2L CRDi', 'code' => 'D4HB', 'displacement' => 2.2, 'horsepower' => 200, 'kw' => 149, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2018, 'year_to' => null],
+            ];
+
+            foreach ($engines as $engine) {
+                if ($engine['car_model_id']) {
+                    Engine::updateOrCreate(
+                        ['car_model_id' => $engine['car_model_id'], 'code' => $engine['code']],
+                        $engine
+                    );
+                }
+            }
+        }
+
+        // ==================== NISSAN ====================
+        if ($nissan) {
+            $qashqai = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Qashqai%')->first();
+            $xterra = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%X-Terra%')->first();
+            $pathfinder = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Pathfinder%')->first();
+            $patrol = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Patrol%')->first();
+            $navara = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Navara%')->first();
+            $juke = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Juke%')->first();
+            $micra = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Micra%')->first();
+            $note = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Note%')->first();
+            $almera = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Almera%')->first();
+            $primera = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Primera%')->first();
+            $xterrain = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%X-Trail%')->first();
+            $leaf = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Leaf%')->first();
+            $gt_r = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%GT-R%')->first();
+            $skyline = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Skyline%')->first();
+            $fairlady = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Fairlady%')->first();
+            $sentra = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Sentra%')->first();
+            $versa = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Versa%')->first();
+            $maxima = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Maxima%')->first();
+            $altima = CarModel::where('car_make_id', $nissan->id)->where('name', 'LIKE', '%Altima%')->first();
+
+            $engines = [
+                // Qashqai
+                ['car_model_id' => $qashqai?->id, 'name' => '1.2L DIG-T', 'code' => 'HRA2DDT', 'displacement' => 1.2, 'horsepower' => 115, 'kw' => 86, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2013, 'year_to' => 2021],
+                ['car_model_id' => $qashqai?->id, 'name' => '1.3L DIG-T', 'code' => 'HR13DDT', 'displacement' => 1.3, 'horsepower' => 140, 'kw' => 104, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2018, 'year_to' => null],
+                ['car_model_id' => $qashqai?->id, 'name' => '1.5L dCi', 'code' => 'K9K', 'displacement' => 1.5, 'horsepower' => 110, 'kw' => 82, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2007, 'year_to' => 2021],
+                ['car_model_id' => $qashqai?->id, 'name' => '1.6L', 'code' => 'HR16DE', 'displacement' => 1.6, 'horsepower' => 114, 'kw' => 85, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2007, 'year_to' => 2013],
+
+                // X-Trail
+                ['car_model_id' => $xterrain?->id, 'name' => '2.0L', 'code' => 'MR20DE', 'displacement' => 2.0, 'horsepower' => 141, 'kw' => 105, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2007, 'year_to' => 2013],
+                ['car_model_id' => $xterrain?->id, 'name' => '2.5L', 'code' => 'QR25DE', 'displacement' => 2.5, 'horsepower' => 169, 'kw' => 126, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2007, 'year_to' => 2013],
+                ['car_model_id' => $xterrain?->id, 'name' => '1.6L dCi', 'code' => 'R9M', 'displacement' => 1.6, 'horsepower' => 130, 'kw' => 96, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2013, 'year_to' => null],
+                ['car_model_id' => $xterrain?->id, 'name' => '2.0L Hybrid', 'code' => 'MR20DDT', 'displacement' => 2.0, 'horsepower' => 147, 'kw' => 110, 'fuel_type' => 'Гибрид', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2013, 'year_to' => 2021],
+
+                // Pathfinder
+                ['car_model_id' => $pathfinder?->id, 'name' => '3.5L V6', 'code' => 'VQ35DE', 'displacement' => 3.5, 'horsepower' => 240, 'kw' => 179, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2004, 'year_to' => 2012],
+                ['car_model_id' => $pathfinder?->id, 'name' => '4.0L V6', 'code' => 'VQ40DE', 'displacement' => 4.0, 'horsepower' => 266, 'kw' => 198, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2004, 'year_to' => 2012],
+                ['car_model_id' => $pathfinder?->id, 'name' => '2.5L dCi', 'code' => 'YD25DDTi', 'displacement' => 2.5, 'horsepower' => 171, 'kw' => 128, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2004, 'year_to' => 2012],
+
+                // Patrol
+                ['car_model_id' => $patrol?->id, 'name' => '4.8L V6', 'code' => 'TB48DE', 'displacement' => 4.8, 'horsepower' => 245, 'kw' => 183, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2004, 'year_to' => 2010],
+                ['car_model_id' => $patrol?->id, 'name' => '4.5L V8', 'code' => 'VK45DE', 'displacement' => 4.5, 'horsepower' => 280, 'kw' => 209, 'fuel_type' => 'Бензин', 'cylinders' => 8, 'turbo' => 'Атмосферный', 'year_from' => 2010, 'year_to' => 2019],
+                ['car_model_id' => $patrol?->id, 'name' => '5.6L V8', 'code' => 'VK56VD', 'displacement' => 5.6, 'horsepower' => 400, 'kw' => 298, 'fuel_type' => 'Бензин', 'cylinders' => 8, 'turbo' => 'Атмосферный', 'year_from' => 2010, 'year_to' => null],
+                ['car_model_id' => $patrol?->id, 'name' => '3.0L dCi', 'code' => 'ZD30DDTi', 'displacement' => 3.0, 'horsepower' => 160, 'kw' => 119, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2000, 'year_to' => 2010],
+
+                // Navara
+                ['car_model_id' => $navara?->id, 'name' => '2.5L dCi', 'code' => 'YD25DDTi', 'displacement' => 2.5, 'horsepower' => 163, 'kw' => 122, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2005, 'year_to' => 2015],
+                ['car_model_id' => $navara?->id, 'name' => '3.0L dCi', 'code' => 'V9X', 'displacement' => 3.0, 'horsepower' => 231, 'kw' => 172, 'fuel_type' => 'Дизель', 'cylinders' => 6, 'turbo' => 'Турбо', 'year_from' => 2010, 'year_to' => 2015],
+                ['car_model_id' => $navara?->id, 'name' => '2.5L', 'code' => 'QR25DE', 'displacement' => 2.5, 'horsepower' => 152, 'kw' => 113, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2005, 'year_to' => 2015],
+
+                // Juke
+                ['car_model_id' => $juke?->id, 'name' => '1.6L', 'code' => 'HR16DE', 'displacement' => 1.6, 'horsepower' => 117, 'kw' => 87, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2010, 'year_to' => 2019],
+                ['car_model_id' => $juke?->id, 'name' => '1.6L DIG-T', 'code' => 'MR16DDT', 'displacement' => 1.6, 'horsepower' => 190, 'kw' => 142, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2010, 'year_to' => 2019],
+                ['car_model_id' => $juke?->id, 'name' => '1.5L dCi', 'code' => 'K9K', 'displacement' => 1.5, 'horsepower' => 110, 'kw' => 82, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2010, 'year_to' => 2019],
+
+                // Micra
+                ['car_model_id' => $micra?->id, 'name' => '1.2L', 'code' => 'HR12DE', 'displacement' => 1.2, 'horsepower' => 80, 'kw' => 60, 'fuel_type' => 'Бензин', 'cylinders' => 3, 'turbo' => 'Атмосферный', 'year_from' => 2010, 'year_to' => null],
+                ['car_model_id' => $micra?->id, 'name' => '1.2L DIG-S', 'code' => 'HR12DDR', 'displacement' => 1.2, 'horsepower' => 98, 'kw' => 73, 'fuel_type' => 'Бензин', 'cylinders' => 3, 'turbo' => 'Компрессор', 'year_from' => 2011, 'year_to' => 2017],
+                ['car_model_id' => $micra?->id, 'name' => '1.5L dCi', 'code' => 'K9K', 'displacement' => 1.5, 'horsepower' => 90, 'kw' => 67, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2003, 'year_to' => 2010],
+
+                // Note
+                ['car_model_id' => $note?->id, 'name' => '1.2L', 'code' => 'HR12DE', 'displacement' => 1.2, 'horsepower' => 80, 'kw' => 60, 'fuel_type' => 'Бензин', 'cylinders' => 3, 'turbo' => 'Атмосферный', 'year_from' => 2012, 'year_to' => null],
+                ['car_model_id' => $note?->id, 'name' => '1.2L DIG-S', 'code' => 'HR12DDR', 'displacement' => 1.2, 'horsepower' => 98, 'kw' => 73, 'fuel_type' => 'Бензин', 'cylinders' => 3, 'turbo' => 'Компрессор', 'year_from' => 2012, 'year_to' => 2020],
+
+                // Almera
+                ['car_model_id' => $almera?->id, 'name' => '1.5L', 'code' => 'HR15DE', 'displacement' => 1.5, 'horsepower' => 105, 'kw' => 78, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2006],
+                ['car_model_id' => $almera?->id, 'name' => '1.8L', 'code' => 'QG18DE', 'displacement' => 1.8, 'horsepower' => 116, 'kw' => 87, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2000, 'year_to' => 2006],
+                ['car_model_id' => $almera?->id, 'name' => '1.5L dCi', 'code' => 'K9K', 'displacement' => 1.5, 'horsepower' => 82, 'kw' => 61, 'fuel_type' => 'Дизель', 'cylinders' => 4, 'turbo' => 'Турбо', 'year_from' => 2003, 'year_to' => 2006],
+
+                // Primera
+                ['car_model_id' => $primera?->id, 'name' => '1.6L', 'code' => 'QG16DE', 'displacement' => 1.6, 'horsepower' => 109, 'kw' => 81, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 1999, 'year_to' => 2002],
+                ['car_model_id' => $primera?->id, 'name' => '1.8L', 'code' => 'QG18DE', 'displacement' => 1.8, 'horsepower' => 116, 'kw' => 87, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 1999, 'year_to' => 2002],
+                ['car_model_id' => $primera?->id, 'name' => '2.0L', 'code' => 'SR20DE', 'displacement' => 2.0, 'horsepower' => 140, 'kw' => 104, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 1999, 'year_to' => 2002],
+
+                // GT-R
+                ['car_model_id' => $gt_r?->id, 'name' => '3.8L V6 Twin-Turbo', 'code' => 'VR38DETT', 'displacement' => 3.8, 'horsepower' => 480, 'kw' => 358, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Твин-турбо', 'year_from' => 2007, 'year_to' => null],
+
+                // 370Z / Fairlady
+                ['car_model_id' => $fairlady?->id, 'name' => '3.7L V6', 'code' => 'VQ37VHR', 'displacement' => 3.7, 'horsepower' => 328, 'kw' => 245, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2008, 'year_to' => 2020],
+
+                // Sentra
+                ['car_model_id' => $sentra?->id, 'name' => '1.6L', 'code' => 'HR16DE', 'displacement' => 1.6, 'horsepower' => 117, 'kw' => 87, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2013, 'year_to' => null],
+                ['car_model_id' => $sentra?->id, 'name' => '1.8L', 'code' => 'MRA8DE', 'displacement' => 1.8, 'horsepower' => 130, 'kw' => 97, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2006, 'year_to' => 2012],
+
+                // Maxima
+                ['car_model_id' => $maxima?->id, 'name' => '3.5L V6', 'code' => 'VQ35DE', 'displacement' => 3.5, 'horsepower' => 265, 'kw' => 198, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2004, 'year_to' => 2008],
+                ['car_model_id' => $maxima?->id, 'name' => '3.5L V6', 'code' => 'VQ35HR', 'displacement' => 3.5, 'horsepower' => 290, 'kw' => 216, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2009, 'year_to' => 2014],
+
+                // Altima
+                ['car_model_id' => $altima?->id, 'name' => '2.5L', 'code' => 'QR25DE', 'displacement' => 2.5, 'horsepower' => 175, 'kw' => 130, 'fuel_type' => 'Бензин', 'cylinders' => 4, 'turbo' => 'Атмосферный', 'year_from' => 2007, 'year_to' => 2012],
+                ['car_model_id' => $altima?->id, 'name' => '3.5L V6', 'code' => 'VQ35DE', 'displacement' => 3.5, 'horsepower' => 270, 'kw' => 201, 'fuel_type' => 'Бензин', 'cylinders' => 6, 'turbo' => 'Атмосферный', 'year_from' => 2007, 'year_to' => 2012],
             ];
 
             foreach ($engines as $engine) {

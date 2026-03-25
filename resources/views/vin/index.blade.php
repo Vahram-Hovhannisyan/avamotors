@@ -22,14 +22,13 @@
                            name="vin"
                            class="vin-input"
                            placeholder="Например: 1HGBH41JXMN109186"
-                           maxlength="17"
-                           minlength="17"
-                           pattern="[A-HJ-NPR-Z0-9]{17}"
-                           title="VIN должен состоять из 17 символов (цифры и буквы A-Z, кроме I, O, Q)"
-                           oninvalid="this.setCustomValidity('VIN должен содержать ровно 17 символов. Допустимы: A-Z (кроме I,O,Q) и 0-9')"
-                           oninput="this.setCustomValidity(''); this.value = this.value.toUpperCase();"
+                           maxlength="19"
+                           title="VIN должен состоять из 17 символов (цифры и буквы A-Z, кроме I, O, Q). Дефисы можно использовать для удобства"
+                           oninput="handleVinInput(this)"
+                           onpaste="handleVinPaste(this)"
                            autocomplete="off"
                            value="{{ strtoupper(old('vin')) }}">
+                    <span class="vin-counter" style="font-size: 12px; color: #666;"></span>
                     <button type="submit" class="vin-btn">Подобрать запчасти</button>
                 </div>
             </form>

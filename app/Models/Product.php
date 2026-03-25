@@ -114,11 +114,6 @@ class Product extends Model
     }
 
 
-    public function engines()
-    {
-        return $this->belongsToMany(Engine::class);
-    }
-
     /**
      * Get discount information for user
      */

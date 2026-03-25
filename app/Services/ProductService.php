@@ -46,26 +46,18 @@ class ProductService implements ProductServiceInterface
             $query->whereIn('category_id', $allIds);
         }
 
-        // 🔥 VIN FILTER — если есть VIN, используем только его, игнорируем make/model из URL
-        $vinActive = session('vin_decoded') && session('selected_vehicle');
 
-        if ($vinActive) {
-            $vehicle = session('selected_vehicle');
-            $this->applyVinFilter($query, $vehicle);
-        } else {
-            // Обычные фильтры по марке/модели из формы
-            if ($request->filled('make')) {
-                $query->whereHas('carModels.carMake', fn($q) =>
-                $q->where('id', (int) $request->make)
-                );
-            }
-
-            if ($request->filled('model')) {
-                $query->whereHas('carModels', fn($q) =>
-                $q->where('id', (int) $request->model)
-                );
-            }
+        // Обычные фильтры по марке/модели из формы
+        if ($request->filled('make')) {
+            $query->whereHas('carModels.carMake', fn($q) => $q->where('id', (int)$request->make)
+            );
         }
+
+        if ($request->filled('model')) {
+            $query->whereHas('carModels', fn($q) => $q->where('id', (int)$request->model)
+            );
+        }
+
 
         // Остальные фильтры (бренд, цена, наличие, поиск) работают всегда
         if ($request->filled('brand')) {
@@ -73,11 +65,11 @@ class ProductService implements ProductServiceInterface
         }
 
         if ($request->filled('price_min')) {
-            $query->where('price', '>=', (float) $request->price_min);
+            $query->where('price', '>=', (float)$request->price_min);
         }
 
         if ($request->filled('price_max')) {
-            $query->where('price', '<=', (float) $request->price_max);
+            $query->where('price', '<=', (float)$request->price_max);
         }
 
         if ($request->boolean('in_stock')) {
@@ -86,8 +78,7 @@ class ProductService implements ProductServiceInterface
 
         if ($request->filled('q')) {
             $search = trim($request->string('q'));
-            $query->where(fn($q) =>
-            $q->where('name', 'like', "%{$search}%")
+            $query->where(fn($q) => $q->where('name', 'like', "%{$search}%")
                 ->orWhere('sku', 'like', "%{$search}%")
                 ->orWhere('brand', 'like', "%{$search}%")
             );
@@ -95,11 +86,11 @@ class ProductService implements ProductServiceInterface
 
         // Сортировка
         match ($request->get('sort')) {
-            'price_asc'  => $query->orderBy('price', 'asc'),
+            'price_asc' => $query->orderBy('price', 'asc'),
             'price_desc' => $query->orderBy('price', 'desc'),
-            'name_asc'   => $query->orderBy('name', 'asc'),
-            'name_desc'  => $query->orderBy('name', 'desc'),
-            default      => $query->latest(),
+            'name_asc' => $query->orderBy('name', 'asc'),
+            'name_desc' => $query->orderBy('name', 'desc'),
+            default => $query->latest(),
         };
 
         $products = $query->paginate(12)->withQueryString();
@@ -108,54 +99,6 @@ class ProductService implements ProductServiceInterface
         return compact('products', 'categories', 'category', 'carMakes', 'brands');
     }
 
-    /**
-     * Apply VIN filter to the product query.
-     * Должен быть public, так как объявлен в интерфейсе
-     *
-     * @param Builder $query
-     * @param array $vehicle
-     * @return void
-     */
-    public function applyVinFilter($query, array $vehicle): void
-    {
-        $make = isset($vehicle['make']) ? $this->normalizeString($vehicle['make']) : null;
-        $model = isset($vehicle['model']) ? $this->normalizeString($vehicle['model']) : null;
-        $trim = isset($vehicle['trim']) ? $this->normalizeString($vehicle['trim']) : null;
-
-        $searchPatterns = [];
-
-        if ($model && $trim) {
-            $searchPatterns[] = $model . $trim;
-        }
-        if ($model) {
-            $searchPatterns[] = $model;
-        }
-        if ($trim) {
-            $searchPatterns[] = $trim;
-        }
-        if ($make && $model) {
-            $searchPatterns[] = $make . $model;
-        }
-        if ($make && $model && $trim) {
-            $searchPatterns[] = $make . $model . $trim;
-        }
-
-        $searchPatterns = array_unique(array_filter($searchPatterns));
-
-        $query->where(function($q) use ($make, $searchPatterns) {
-            if ($make) {
-                $q->whereRaw("REPLACE(LOWER(brand), ' ', '') LIKE ?", ["%{$make}%"]);
-            }
-
-            if (!empty($searchPatterns)) {
-                foreach ($searchPatterns as $pattern) {
-                    $normalizedPattern = $pattern;
-                    $q->orWhereRaw("REPLACE(LOWER(name), ' ', '') LIKE ?", ["%{$normalizedPattern}%"]);
-                    $q->orWhereRaw("REPLACE(LOWER(description), ' ', '') LIKE ?", ["%{$normalizedPattern}%"]);
-                }
-            }
-        });
-    }
 
     /**
      * Нормализация строки (убираем пробелы, приводим к нижнему регистру)

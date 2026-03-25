@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\EngineController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -44,11 +43,6 @@ Route::prefix('cart')->name('cart.')->controller(CartController::class)->group(f
     Route::get('/count',            'count')->name('count'); // для AJAX
 });
 
-Route::prefix('vin')->name('vin.')->controller(\App\Http\Controllers\VinController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/decode', 'decode')->name('decode');
-    Route::post('/clear', 'clear')->name('clear');
-});
 
 
 // ── Guest only ────────────────────────────────────────
@@ -148,10 +142,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/products/{product}/analogs/{analog}',   [AnalogController::class, 'attach'])->name('products.analogs.attach');
     Route::delete('/products/{product}/analogs/{analog}', [AnalogController::class, 'detach'])->name('products.analogs.detach');
 
-    // Engines attach/detach to product
-    Route::post('/products/{product}/engines/{engine}', [\App\Http\Controllers\Admin\ProductController::class, 'attachEngine'])->name('products.engines.attach');
-    Route::delete('/products/{product}/engines/{engine}', [\App\Http\Controllers\Admin\ProductController::class, 'detachEngine'])->name('products.engines.detach');
-
     Route::resource('pricing-tiers', \App\Http\Controllers\Admin\PricingTierController::class);
     Route::post('pricing-tiers/{pricingTier}/bulk-assign', [\App\Http\Controllers\Admin\PricingTierController::class, 'bulkAssign'])->name('pricing-tiers.bulk-assign');
     Route::delete('pricing-tiers/{pricingTier}/remove-users', [\App\Http\Controllers\Admin\PricingTierController::class, 'removeUsers'])->name('pricing-tiers.remove-users');
@@ -163,9 +153,4 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::get('/orders/{order}/invoice/preview', [InvoiceController::class, 'preview'])
         ->name('orders.invoice.preview');
-
-    Route::resource('engines', EngineController::class)->except(['show']);
-    Route::get('engines/get-models/{make_id}', [EngineController::class, 'getModelsByMake'])->name('engines.get-models');
-    Route::get('engines/export/csv', [EngineController::class, 'export'])->name('engines.export');
-    Route::post('engines/import', [EngineController::class, 'import'])->name('engines.import');
 });

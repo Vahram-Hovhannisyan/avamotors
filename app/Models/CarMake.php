@@ -7,10 +7,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CarMake extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+    ];
 
-    public function carModels(): HasMany
+    // Убираем лишние поля, которых нет в таблице
+    // protected $casts = [];
+
+    /**
+     * Связь с моделями автомобилей
+     */
+    public function models(): HasMany
     {
-        return $this->hasMany(CarModel::class);
+        return $this->hasMany(CarModel::class, 'car_make_id');
     }
+
 }

@@ -29,13 +29,4 @@ interface ProductServiceInterface
      * Get available brands, optionally filtered by category.
      */
     public function getBrands(?int $categoryId = null): \Illuminate\Support\Collection;
-
-    /**
-     * Apply VIN filter to the product query.
-     *
-     * @param Builder $query
-     * @param array $vehicle
-     * @return void
-     */
-    public function applyVinFilter($query, array $vehicle): void;
 }

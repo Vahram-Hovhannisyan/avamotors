@@ -46,10 +46,6 @@
             <div class="stat-label">Уровни ценообразования</div>
             <div class="stat-value">{{ $stats['pricing_tiers_count'] ?? 0 }}</div>
         </a>
-        <a href="{{ route('admin.engines.index') }}" class="stat-card">
-            <div class="stat-label">Двигатели</div>
-            <div class="stat-value">{{ $totalEngines }}</div>
-        </a>
     </div>
 
     {{-- Pricing Tiers Statistics --}}

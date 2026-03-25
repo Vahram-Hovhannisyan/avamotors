@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Interfaces\AdminServiceInterface;
 use App\Models\Analog;
-use App\Models\Engine;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 class DashboardController extends Controller
 {
@@ -30,19 +29,6 @@ class DashboardController extends Controller
         $totalAnalogs = Analog::count();
         $analogBrands = Analog::distinct()->orderBy('brand')->pluck('brand');
 
-        // ✅ НОВОЕ: Получаем статистику по двигателям
-        $totalEngines = Engine::count();
-        $recentEngines = Engine::with('carModel.carMake')
-            ->latest()
-            ->take(8)
-            ->get();
-
-        // Статистика по типам топлива
-        $fuelTypeStats = Engine::whereNotNull('fuel_type')
-            ->selectRaw('fuel_type, COUNT(*) as count')
-            ->groupBy('fuel_type')
-            ->orderByDesc('count')
-            ->get();
 
         $analogQuery = Analog::withCount('products');
         if ($request->filled('aq')) {
@@ -121,8 +107,6 @@ class DashboardController extends Controller
             // Аналитика
             'revenueDays', 'totalRevenue', 'totalOrders', 'avgOrder',
             'topProducts', 'revenueByStatus', 'period',
-            // Двигатели
-            'totalEngines', 'recentEngines', 'fuelTypeStats'
         ));
     }
 }

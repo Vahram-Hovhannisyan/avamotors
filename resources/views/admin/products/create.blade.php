@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Создать товар — Админ')
+@section('title', __('admin.products.create.title') . ' — Админ')
 
 @push('styles')
     @vite(['resources/css/admin/products.css'])
@@ -8,24 +8,24 @@
 
 @section('content')
 
-    <h1 class="form-page-title">Создать товар</h1>
-    <p class="form-page-sub">Заполните информацию о новом товаре</p>
+    <h1 class="form-page-title">{{ __('admin.products.create.title') }}</h1>
+    <p class="form-page-sub">{{ __('admin.products.create.subtitle') }}</p>
 
     @if(session('success'))
         <div class="flash-success">{{ session('success') }}</div>
     @endif
     @if($errors->any())
         <div class="error-box">
-            <strong>Пожалуйста, исправьте ошибки:</strong>
+            <strong>{{ __('admin.products.create.errors_title') }}</strong>
             <ul>@foreach($errors->all() as $e)
-                    <li>{{ $e }}</li>
+                    <li>{{ __($e) }}</li>
                 @endforeach</ul>
         </div>
     @endif
 
     <div class="tabs">
-        <button class="tab-btn active" data-tab="info">📦 Информация о товаре</button>
-        <button class="tab-btn" data-tab="analogs">🔄 Аналоги</button>
+        <button class="tab-btn active" data-tab="info">📦 {{ __('admin.products.create.tabs.info') }}</button>
+        <button class="tab-btn" data-tab="analogs">🔄 {{ __('admin.products.create.tabs.analogs') }}</button>
     </div>
 
     {{-- TAB 1: INFO --}}
@@ -37,58 +37,61 @@
                 {{-- LEFT --}}
                 <div>
                     <div class="form-card">
-                        <div class="form-card-title">Основная информация</div>
+                        <div class="form-card-title">{{ __('admin.products.create.main_info') }}</div>
                         <div class="form-group">
-                            <label for="name">Название *</label>
+                            <label for="name">{{ __('admin.products.create.name') }} *</label>
                             <input type="text" id="name" name="name" value="{{ old('name') }}" required>
                             @error('name')
-                            <div class="form-error">{{ $message }}</div> @enderror
+                            <div class="form-error">{{ __($message) }}</div> @enderror
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="sku">SKU / Артикул *</label>
+                                <label for="sku">{{ __('admin.products.create.sku') }} *</label>
                                 <input type="text" id="sku" name="sku" value="{{ old('sku') }}" required>
                                 @error('sku')
-                                <div class="form-error">{{ $message }}</div> @enderror
+                                <div class="form-error">{{ __($message) }}</div> @enderror
                             </div>
                             <div class="form-group">
-                                <label for="brand">Бренд</label>
+                                <label for="brand">{{ __('admin.products.create.brand') }}</label>
                                 <input type="text" id="brand" name="brand" value="{{ old('brand') }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="description">Описание</label>
+                            <label for="description">{{ __('admin.products.create.description') }}</label>
                             <textarea id="description" name="description">{{ old('description') }}</textarea>
                         </div>
                     </div>
 
                     <div class="form-card">
-                        <div class="form-card-title">Цена и склад</div>
+                        <div class="form-card-title">{{ __('admin.products.create.price_stock') }}</div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="price">Цена (դր.) *</label>
+                                <label for="price">{{ __('admin.products.create.price') }}
+                                    ({{ __('admin.products.currency') }}) *</label>
                                 <input type="number" id="price" name="price" step="0.01" min="0"
                                        value="{{ old('price') }}" required>
                                 @error('price')
-                                <div class="form-error">{{ $message }}</div> @enderror
+                                <div class="form-error">{{ __($message) }}</div> @enderror
                             </div>
                             <div class="form-group">
-                                <label for="quantity">Количество *</label>
+                                <label for="quantity">{{ __('admin.products.create.quantity') }} *</label>
                                 <input type="number" id="quantity" name="quantity" min="0"
                                        value="{{ old('quantity', 0) }}" required>
                                 @error('quantity')
-                                <div class="form-error">{{ $message }}</div> @enderror
+                                <div class="form-error">{{ __($message) }}</div> @enderror
                             </div>
                         </div>
                     </div>
 
                     <div class="form-card">
                         <div class="form-card-title">
-                            Подходит для автомобилей
-                            <button type="button" id="clearAllModels" class="clear-models-btn">Сбросить всё</button>
+                            {{ __('admin.products.create.fits_cars') }}
+                            <button type="button" id="clearAllModels"
+                                    class="clear-models-btn">{{ __('admin.products.create.clear_all') }}</button>
                         </div>
                         <div class="cars-search-wrap">
-                            <input type="text" id="carSearch" placeholder="Поиск марки или модели..."
+                            <input type="text" id="carSearch"
+                                   placeholder="{{ __('admin.products.create.search_models') }}"
                                    class="cars-search-input">
                             <span class="cars-selected-count" id="carsSelectedCount"></span>
                         </div>
@@ -98,7 +101,8 @@
                                     <div class="make-accordion-trigger" data-target="make-create-{{ $make->id }}">
                                         <span class="make-accordion-name">{{ $make->name }}</span>
                                         <span class="make-accordion-meta">
-                                            <span class="make-model-count">{{ $make->models->count() }} мод.</span>
+                                            <span
+                                                class="make-model-count">{{ optional($make->carModels)->count() ?? 0 }} {{ __('admin.cars.models_short') }}</span>
                                             <span class="make-selected-badge" id="badge-create-{{ $make->id }}"
                                                   style="display:none">0</span>
                                         </span>
@@ -108,7 +112,7 @@
                                         </span>
                                     </div>
                                     <div class="models-list" id="make-create-{{ $make->id }}">
-                                        @foreach($make->models as $model)
+                                        @foreach($make->carModels as $model)
                                             <label class="model-check" data-model="{{ strtolower($model->name) }}">
                                                 <input type="checkbox" name="car_models[]" value="{{ $model->id }}"
                                                        data-make-id="{{ $make->id }}">
@@ -125,10 +129,10 @@
                 {{-- RIGHT --}}
                 <div>
                     <div class="form-card">
-                        <div class="form-card-title">Категория *</div>
+                        <div class="form-card-title">{{ __('admin.products.create.category') }} *</div>
                         <div class="form-group">
                             <select name="category_id" required>
-                                <option value="">— Выберите категорию —</option>
+                                <option value="">{{ __('admin.products.create.select_category') }}</option>
                                 @foreach(App\Models\Category::flatTree() as $item)
                                     <option
                                         value="{{ $item['category']->id }}" {{ old('category_id') == $item['category']->id ? 'selected' : '' }}>
@@ -137,42 +141,41 @@
                                 @endforeach
                             </select>
                             @error('category_id')
-                            <div class="form-error">{{ $message }}</div> @enderror
+                            <div class="form-error">{{ __($message) }}</div> @enderror
                         </div>
                     </div>
 
                     <div class="form-card">
-                        <div class="form-card-title">Изображение товара</div>
-                        <div class="img-preview" id="preview-box">
-                            <span class="img-placeholder">Нет изображения</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="image">Загрузить изображение</label>
-                            <input type="file" id="image" name="image" accept="image/*">
-                            @error('image')
-                            <div class="form-error">{{ $message }}</div> @enderror
-                        </div>
+                        <div class="form-card-title">{{ __('admin.products.create.product_image') }}</div>
+
+                        @include('components.image-upload', ['currentImage' => $product->image ?? null])
+
+                        @error('image')
+                        <div class="form-error">{{ __($message) }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-card">
-                        <div class="form-card-title">Публикация</div>
+                        <div class="form-card-title">{{ __('admin.products.create.publication') }}</div>
                         <div class="form-group">
                             <label class="check-label">
                                 <input type="checkbox" name="is_active"
                                        value="1" {{ old('is_active', true) ? 'checked' : '' }}>
-                                Товар активен (виден покупателям)
+                                {{ __('admin.products.create.active_status') }}
                             </label>
                         </div>
                     </div>
 
                     <div class="form-card">
                         <div class="form-card-title">
-                            Аналоги
-                            <a href="{{ route('admin.analogs.create') }}" target="_blank">+ создать новый</a>
+                            {{ __('admin.products.create.analogs') }}
+                            <a href="{{ route('admin.analogs.create') }}"
+                               target="_blank">+ {{ __('admin.products.create.create_new') }}</a>
                         </div>
                         @if($analogs->isEmpty())
-                            <div class="analogs-empty">Справочник пуст. <a href="{{ route('admin.analogs.create') }}"
-                                                                           target="_blank">Добавить →</a></div>
+                            <div class="analogs-empty">{{ __('admin.products.create.analogs_empty') }} <a
+                                    href="{{ route('admin.analogs.create') }}"
+                                    target="_blank">{{ __('admin.products.create.add_analog') }} →</a></div>
                         @else
                             <div class="analogs-scroll">
                                 @foreach($analogs->groupBy('brand') as $brand => $group)
@@ -193,8 +196,10 @@
                         @endif
                     </div>
 
-                    <button type="submit" class="btn btn-primary form-submit">Сохранить товар</button>
-                    <a href="{{ route('admin.products') }}" class="form-back">← Назад к списку</a>
+                    <button type="submit"
+                            class="btn btn-primary form-submit">{{ __('admin.products.create.save_button') }}</button>
+                    <a href="{{ route('admin.products') }}"
+                       class="form-back">← {{ __('admin.products.create.back_to_list') }}</a>
                 </div>
 
             </div>
@@ -204,32 +209,34 @@
     {{-- TAB 2: ANALOGS --}}
     <div id="tab-analogs" class="tab-panel">
         <div class="analog-hint">
-            Выберите аналоги из справочника для нового товара.
-            Для добавления нового — <a href="{{ route('admin.analogs.create') }}" target="_blank">создать аналог →</a>
+            {{ __('admin.products.create.analogs_hint') }}
+            <a href="{{ route('admin.analogs.create') }}"
+               target="_blank">{{ __('admin.products.create.create_analog') }} →</a>
         </div>
 
         <div class="analogs-layout">
             {{-- Выбранные аналоги (пока пусто) --}}
             <div class="analog-card">
                 <div class="analog-card-header">
-                    <span class="analog-card-title">Выбранные аналоги</span>
-                    <span class="analog-card-count" id="selectedAnalogsCount">0 шт.</span>
+                    <span class="analog-card-title">{{ __('admin.products.create.selected_analogs') }}</span>
+                    <span class="analog-card-count"
+                          id="selectedAnalogsCount">0 {{ __('admin.products.create.pcs') }}</span>
                 </div>
                 <div id="selectedAnalogsList" class="analog-table"
                      style="padding: 1rem; text-align: center; color: var(--muted);">
-                    Ничего не выбрано
+                    {{ __('admin.products.create.nothing_selected') }}
                 </div>
             </div>
 
             {{-- Доступные аналоги --}}
             <div class="analog-card">
                 <div class="analog-card-header">
-                    <span class="analog-card-title">Доступные аналоги</span>
-                    <span class="analog-card-count">{{ $analogs->count() }} шт.</span>
+                    <span class="analog-card-title">{{ __('admin.products.create.available_analogs') }}</span>
+                    <span class="analog-card-count">{{ $analogs->count() }} {{ __('admin.products.create.pcs') }}</span>
                 </div>
                 <div class="analog-search">
-                    <input type="text" id="analogSearch" placeholder="Бренд или артикул...">
-                    <button type="button" id="searchAnalogBtn">Найти</button>
+                    <input type="text" id="analogSearch" placeholder="{{ __('admin.products.create.search_analogs') }}">
+                    <button type="button" id="searchAnalogBtn">{{ __('admin.products.create.search_btn') }}</button>
                 </div>
                 <div class="analogs-scroll" style="max-height: 400px; overflow-y: auto;">
                     @foreach($analogs->groupBy('brand') as $brand => $group)
@@ -267,12 +274,12 @@
             const countSpan = document.getElementById('selectedAnalogsCount');
 
             if (selectedCheckboxes.length === 0) {
-                selectedList.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--muted);">Ничего не выбрано</div>';
-                countSpan.textContent = '0 шт.';
+                selectedList.innerHTML = '<div style="padding: 1rem; text-align: center; color: var(--muted);">{{ __('admin.products.create.nothing_selected') }}</div>';
+                countSpan.textContent = '0 {{ __('admin.products.create.pcs') }}';
                 return;
             }
 
-            countSpan.textContent = selectedCheckboxes.length + ' шт.';
+            countSpan.textContent = selectedCheckboxes.length + ' {{ __('admin.products.create.pcs') }}';
 
             let html = '<table class="analog-table"><tbody>';
             selectedCheckboxes.forEach(cb => {
@@ -285,7 +292,7 @@
                         <td class="analog-sku">${sku}</td>
                         <td class="analog-note">${note || ''}</td>
                         <td class="analog-td-right">
-                            <button type="button" class="analog-del-btn" data-id="${cb.value}">✕ Убрать</button>
+                            <button type="button" class="analog-del-btn" data-id="${cb.value}">✕ {{ __('admin.products.create.remove') }}</button>
                         </td>
                     </tr>
                 `;

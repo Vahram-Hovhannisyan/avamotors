@@ -17,6 +17,7 @@ class CarMakeSeeder extends Seeder
             ['name' => 'Kia'],
             ['name' => 'Mercedes-Benz'],
             ['name' => 'BMW'],
+            ['name' => 'Volkswagen']
         ];
 
         foreach ($makes as $make) {

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ $locale ?? app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
+    <title>{{ __('emails.reset_password.title') }} — AVAMotors</title>
     <style>
         body        { margin:0; padding:0; background:#f4f6fb; font-family:'Helvetica Neue',Arial,sans-serif; font-size:14px; color:#333; }
         .wrap       { max-width:520px; margin:40px auto; background:#fff; border-top:3px solid #0a1b48; }
@@ -25,25 +26,27 @@
         <span class="logo">AVA<span>Motors</span></span>
     </div>
     <div class="body">
-        <h2>Сброс пароля</h2>
+        <h2>{{ __('emails.reset_password.title') }}</h2>
+
         @if($userName)
-            <p>Здравствуйте, {{ $userName }}!</p>
+            <p>{{ __('emails.reset_password.greeting', ['name' => $userName]) }}</p>
         @endif
-        <p>Мы получили запрос на сброс пароля для вашего аккаунта. Нажмите кнопку ниже чтобы создать новый пароль:</p>
 
-        <a href="{{ $resetUrl }}" class="btn">Сбросить пароль</a>
+        <p>{{ __('emails.reset_password.message') }}</p>
 
-        <p>Ссылка действительна в течение <strong>60 минут</strong>.</p>
+        <a href="{{ $resetUrl }}" class="btn">{{ __('emails.reset_password.button') }}</a>
+
+        <p>{!! __('emails.reset_password.expiry') !!}</p>
 
         <div class="note">
-            <p>Если вы не запрашивали сброс пароля — просто проигнорируйте это письмо. Ваш пароль останется прежним.</p>
-            <p>Если кнопка не работает, скопируйте ссылку в браузер:<br>
+            <p>{{ __('emails.reset_password.ignore') }}</p>
+            <p>{{ __('emails.reset_password.copy_link') }}<br>
                 <span class="url">{{ $resetUrl }}</span>
             </p>
         </div>
     </div>
     <div class="footer">
-        © {{ date('Y') }} AVAMotors · Ереван, Армения
+        {!! __('emails.reset_password.footer', ['year' => date('Y')]) !!}
     </div>
 </div>
 </body>

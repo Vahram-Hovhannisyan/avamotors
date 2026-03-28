@@ -22,6 +22,6 @@ interface CategoryServiceInterface
     /** Find category by slug with parent chain and children loaded. */
     public function findBySlug(string $slug): Category;
 
-    /** Clear nav cache — call after any category change. */
+    /** Clear nav.php cache — call after any category change. */
     public function clearCache(): void;
 }

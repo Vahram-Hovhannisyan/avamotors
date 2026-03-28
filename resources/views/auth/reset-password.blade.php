@@ -17,9 +17,9 @@
                 @php
                     $msg = $errors->first('email');
                     $friendly = match($msg) {
-                        'passwords.token'     => 'Ссылка устарела или недействительна. Запросите новую.',
-                        'passwords.user'      => 'Пользователь с таким e-mail не найден.',
-                        'passwords.throttled' => 'Подождите немного перед повторной попыткой.',
+                        'password.token'     => 'Ссылка устарела или недействительна. Запросите новую.',
+                        'password.user'      => 'Пользователь с таким e-mail не найден.',
+                        'password.throttled' => 'Подождите немного перед повторной попыткой.',
                         default               => $msg,
                     };
                 @endphp

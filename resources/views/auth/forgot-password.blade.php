@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Восстановление пароля — AVAMotors')
+@section('title', __('password.title') . ' — AVAMotors')
 
 @push('styles')
     @vite(['resources/css/auth.css'])
@@ -10,20 +10,20 @@
 
     <div class="auth-wrap">
         <div class="auth-box">
-            <h1 class="auth-title">Забыли пароль?</h1>
-            <p class="auth-sub">Введите e-mail — пришлём ссылку для сброса пароля</p>
+            <h1 class="auth-title">{{ __('password.title') }}</h1>
+            <p class="auth-sub">{{ __('password.subtitle') }}</p>
 
             @if(session('status'))
-                <div class="flash-success">✓ {{ session('status') }}</div>
+                <div class="flash-success">✓ {{__('messages.'.session('status'))}}</div>
             @endif
 
             @if($errors->has('email'))
                 @php
                     $msg = $errors->first('email');
                     $friendly = match($msg) {
-                        'passwords.throttled' => 'Подождите немного перед повторной отправкой.',
-                        'passwords.user'      => 'Пользователь с таким e-mail не найден.',
-                        'passwords.sent'      => 'Ссылка уже была отправлена. Проверьте почту.',
+                        'password.throttled' => __('password.throttled'),
+                        'password.user'      => __('password.user'),
+                        'password.sent'      => __('password.sent'),
                         default               => $msg,
                     };
                 @endphp
@@ -33,17 +33,17 @@
             <form action="{{ route('password.email') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="email">E-mail</label>
+                    <label for="email">{{ __('password.email') }}</label>
                     <input type="email" id="email" name="email"
                            value="{{ old('email') }}"
                            placeholder="you@example.com"
                            required autofocus>
                 </div>
-                <button type="submit" class="submit-btn">Отправить ссылку</button>
+                <button type="submit" class="submit-btn">{{ __('password.send_link') }}</button>
             </form>
 
             <p class="login-link">
-                Вспомнили пароль? <a href="{{ route('login') }}">Войти</a>
+                {{ __('password.remembered') }} <a href="{{ route('login') }}">{{ __('password.login') }}</a>
             </p>
         </div>
     </div>

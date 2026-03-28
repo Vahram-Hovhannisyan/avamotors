@@ -7,6 +7,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 
 class ResetPasswordMail extends Mailable
 {
@@ -14,12 +16,19 @@ class ResetPasswordMail extends Mailable
 
     public function __construct(
         public string $resetUrl,
-        public string $userName = ''
+        public string $userName = '',
+        public $locale = 'hy'
     ) {}
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Сброс пароля — AVAMotors');
+        // Устанавливаем язык для перевода
+        App::setLocale($this->locale);
+
+        // Получаем переведенный заголовок
+        $subject = Lang::get('emails.reset_password.title', [], $this->locale);
+
+        return new Envelope(subject: $subject);
     }
 
     public function content(): Content

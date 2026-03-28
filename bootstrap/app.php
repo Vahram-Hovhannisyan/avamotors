@@ -11,10 +11,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Регистрируем алиасы для middleware
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'setlocale' => \App\Http\Middleware\SetLocale::class, // Добавляем алиас
         ]);
 
+        // Добавляем SetLocale в группу web middleware (в конец массива)
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
+        // Исключения для CSRF
         $middleware->validateCsrfTokens(except: [
             '/register',
             '/login',

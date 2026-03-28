@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'slug', 'description', 'parent_id', 'sort_order'];
+    protected $fillable = ['name', 'slug', 'description', 'parent_id', 'sort_order', 'translations'];
+
+    protected $casts = [
+        'translations' => 'array',
+    ];
 
     // ─── Relations ────────────────────────────────────
 
@@ -68,7 +72,7 @@ class Category extends Model
         $ids = [];
         foreach ($this->children as $child) {
             $ids[] = $child->id;
-            $ids   = array_merge($ids, $child->getDescendantIds());
+            $ids = array_merge($ids, $child->getDescendantIds());
         }
         return $ids;
     }
@@ -79,7 +83,7 @@ class Category extends Model
     public function getBreadcrumb(): \Illuminate\Support\Collection
     {
         $crumbs = collect();
-        $cat    = $this;
+        $cat = $this;
 
         while ($cat) {
             $crumbs->prepend($cat);
@@ -103,7 +107,7 @@ class Category extends Model
     public function getDepthAttribute(): int
     {
         $depth = 0;
-        $cat   = $this;
+        $cat = $this;
         while ($cat->parent_id) {
             $depth++;
             $cat = $cat->parent;
@@ -150,7 +154,8 @@ class Category extends Model
         \Illuminate\Support\Collection &$result,
         int $depth,
         ?int $excludeId
-    ): void {
+    ): void
+    {
         foreach ($nodes as $cat) {
             if ($cat->id === $excludeId) {
                 continue;

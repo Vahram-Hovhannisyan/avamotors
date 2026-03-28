@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
                 'city' => 'Hrazdan',
                 'address' => 'Nar-Dos 22',
                 'role'     => 'admin',
+                'locale' => 'hy',
+                'email_verified_at' => now(),
             ]
         );
 

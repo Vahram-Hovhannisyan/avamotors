@@ -80,7 +80,7 @@ class ProductController extends Controller
         }
 
         $product = Product::create($data);
-        $product->carModels()->sync($data['car_models'] ?? []);
+        $product->models()->sync($data['car_models'] ?? []);
         $product->analogs()->sync($data['analogs'] ?? []);
 
         return redirect()->route('admin.products.edit', $product)

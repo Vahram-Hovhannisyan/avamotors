@@ -98,7 +98,7 @@
                                     <div class="make-accordion-trigger" data-target="make-create-{{ $make->id }}">
                                         <span class="make-accordion-name">{{ $make->name }}</span>
                                         <span class="make-accordion-meta">
-                                            <span class="make-model-count">{{ $make->carModels->count() }} мод.</span>
+                                            <span class="make-model-count">{{ $make->models->count() }} мод.</span>
                                             <span class="make-selected-badge" id="badge-create-{{ $make->id }}"
                                                   style="display:none">0</span>
                                         </span>
@@ -108,7 +108,7 @@
                                         </span>
                                     </div>
                                     <div class="models-list" id="make-create-{{ $make->id }}">
-                                        @foreach($make->carModels as $model)
+                                        @foreach($make->models as $model)
                                             <label class="model-check" data-model="{{ strtolower($model->name) }}">
                                                 <input type="checkbox" name="car_models[]" value="{{ $model->id }}"
                                                        data-make-id="{{ $make->id }}">

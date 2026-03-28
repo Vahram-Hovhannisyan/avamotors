@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Корзина — AVAMotors')
+@section('title', __('cart.title') . ' — AVAMotors')
 
 @push('styles')
     @vite(['resources/css/cart.css'])
@@ -15,13 +15,13 @@
         <div class="flash-error">{{ session('error') }}</div>
     @endif
 
-    <h1 class="page-title">Корзина</h1>
+    <h1 class="page-title">{{ __('cart.title') }}</h1>
 
     @if(empty($items))
         <div class="empty-cart">
-            <strong>Корзина пуста</strong>
-            <p>Добавьте товары из каталога</p>
-            <a href="{{ route('catalog') }}" class="checkout-btn inline">Перейти в каталог</a>
+            <strong>{{ __('cart.empty.title') }}</strong>
+            <p>{{ __('cart.empty.message') }}</p>
+            <a href="{{ route('catalog') }}" class="checkout-btn inline">{{ __('cart.empty.button') }}</a>
         </div>
     @else
         <div class="cart-layout">
@@ -30,12 +30,12 @@
                 <div class="cart-table-wrap">
                     <table class="cart-table">
                         <thead>
-                        <tr>
-                            <th>Товар</th>
-                            <th>Цена</th>
-                            <th>Кол-во</th>
-                            <th>Сумма</th>
-                            <th></th>
+                        里的
+                        <th>{{ __('cart.table.product') }}</th>
+                        <th>{{ __('cart.table.price') }}</th>
+                        <th>{{ __('cart.table.quantity') }}</th>
+                        <th>{{ __('cart.table.total') }}</th>
+                        <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -53,13 +53,13 @@
                             <tr>
                                 <td>
                                     <div class="cart-product-name">{{ $product->name }}</div>
-                                    <div class="cart-product-sku">Арт. {{ $product->sku }}</div>
+                                    <div class="cart-product-sku">{{ __('cart.table.sku') }} {{ $product->sku }}</div>
                                     @if($hasDiscount)
                                         <div class="cart-discount-badge">
                                             @if($discountInfo && $discountInfo['type'] === 'percentage')
                                                 -{{ $discountInfo['percent'] }}%
                                             @elseif($discountInfo && $discountInfo['type'] === 'fixed')
-                                                -{{ number_format($discountInfo['amount'], 0) }} դր.
+                                                -{{ number_format($discountInfo['amount'], 0) }} {{ __('cart.currency') }}
                                             @endif
                                             @if($discountInfo && isset($discountInfo['tier_name']))
                                                 <span class="tier-name">({{ $discountInfo['tier_name'] }})</span>
@@ -70,11 +70,11 @@
                                 <td>
                                     @if($hasDiscount)
                                         <div class="price-wrapper">
-                                            <span class="current-price">{{ number_format($currentPrice, 0, '.', ' ') }} դր.</span>
-                                            <span class="old-price">{{ number_format($originalPrice, 0, '.', ' ') }} դր.</span>
+                                            <span class="current-price">{{ number_format($currentPrice, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
+                                            <span class="old-price">{{ number_format($originalPrice, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                                         </div>
                                     @else
-                                        <span class="current-price">{{ number_format($currentPrice, 0, '.', ' ') }} դր.</span>
+                                        <span class="current-price">{{ number_format($currentPrice, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                                     @endif
                                 </td>
                                 <td>
@@ -89,9 +89,9 @@
                                 </td>
                                 <td class="cart-subtotal">
                                     <div class="subtotal-wrapper">
-                                        <span class="subtotal-amount">{{ number_format($subtotal, 0, '.', ' ') }} դր.</span>
+                                        <span class="subtotal-amount">{{ number_format($subtotal, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                                         @if($hasDiscount && $savings > 0)
-                                            <span class="subtotal-savings">экономия {{ number_format($savings, 0, '.', ' ') }} դր.</span>
+                                            <span class="subtotal-savings">{{ __('cart.table.savings') }} {{ number_format($savings, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -99,7 +99,7 @@
                                     <form method="POST" action="{{ route('cart.remove') }}">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <button type="submit" class="remove-btn">✕ Удалить</button>
+                                        <button type="submit" class="remove-btn">{{ __('cart.table.remove') }}</button>
                                     </form>
                                 </td>
                             </tr>
@@ -112,14 +112,14 @@
                     <form method="POST" action="{{ route('cart.clear') }}">
                         @csrf
                         <button type="submit" class="remove-btn"
-                                onclick="return confirm('Очистить корзину?')">Очистить корзину
+                                onclick="return confirm('{{ __('cart.clear_confirm') }}')">{{ __('cart.clear_button') }}
                         </button>
                     </form>
                 </div>
             </div>
 
             <div class="summary-card">
-                <div class="summary-title">Итого</div>
+                <div class="summary-title">{{ __('cart.summary.title') }}</div>
 
                 @php
                     $totalOriginal = 0;
@@ -147,9 +147,9 @@
                     <div class="summary-row">
                         <span class="label">{{ Str::limit($product->name, 28) }}</span>
                         <div class="summary-item-price">
-                            <span>{{ $item['quantity'] }} × {{ number_format($currentPrice, 0, '.', ' ') }} դր.</span>
+                            <span>{{ $item['quantity'] }} × {{ number_format($currentPrice, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                             @if($hasDiscount)
-                                <span class="summary-discount-badge">со скидкой</span>
+                                <span class="summary-discount-badge">{{ __('cart.summary.with_discount') }}</span>
                             @endif
                         </div>
                     </div>
@@ -157,18 +157,18 @@
 
                 @if($totalDiscount > 0)
                     <div class="summary-discount">
-                        <span>Скидка</span>
-                        <span class="discount-amount">- {{ number_format($totalDiscount, 0, '.', ' ') }} դր.</span>
+                        <span>{{ __('cart.summary.discount') }}</span>
+                        <span class="discount-amount">- {{ number_format($totalDiscount, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                     </div>
                 @endif
 
                 <div class="summary-total">
-                    <span>К оплате</span>
+                    <span>{{ __('cart.summary.total') }}</span>
                     <div class="total-wrapper">
                         @if($totalDiscount > 0)
-                            <span class="total-original">{{ number_format($totalOriginal, 0, '.', ' ') }} դր.</span>
+                            <span class="total-original">{{ number_format($totalOriginal, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                         @endif
-                        <span class="total-final">{{ number_format($totalFinal, 0, '.', ' ') }} դր.</span>
+                        <span class="total-final">{{ number_format($totalFinal, 0, '.', ' ') }} {{ __('cart.currency') }}</span>
                     </div>
                 </div>
 
@@ -177,16 +177,16 @@
                     <div class="cart-guest-warning">
                         <div class="warning-icon">🔒</div>
                         <div class="warning-content">
-                            <strong>Ваши товары сохранятся</strong>
-                            <p>После входа в аккаунт все товары в корзине останутся. Вы можете спокойно войти или зарегистрироваться — добавленные позиции никуда не денутся.</p>
+                            <strong>{{ __('cart.guest.title') }}</strong>
+                            <p>{{ __('cart.guest.message') }}</p>
                         </div>
                     </div>
                 @endguest
 
                 @auth
-                    <a href="{{ route('orders.checkout') }}" class="checkout-btn">Оформить заказ</a>
+                    <a href="{{ route('orders.checkout') }}" class="checkout-btn">{{ __('cart.summary.checkout') }}</a>
                 @else
-                    <a href="{{ route('login') }}" class="checkout-btn">Войти для оформления</a>
+                    <a href="{{ route('login') }}" class="checkout-btn">{{ __('cart.summary.login_to_checkout') }}</a>
                 @endauth
             </div>
 

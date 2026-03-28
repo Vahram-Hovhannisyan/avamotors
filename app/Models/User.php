@@ -15,7 +15,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'password', 'role', 'address', 'city'
+        'name', 'email', 'phone', 'password', 'role', 'address', 'city', 'locale'
     ];
 
     protected $hidden = [
@@ -68,10 +68,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 // Метод для получения активного pricing tier пользователя
-    public function getActivePricingTier(): ?PricingTier
+    public function getActivePricingTier()
     {
         return $this->pricingTiers()
             ->where('is_active', true)
             ->first();
     }
+
 }

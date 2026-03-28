@@ -17,7 +17,7 @@ class CarMake extends Model
     /**
      * Связь с моделями автомобилей
      */
-    public function models(): HasMany
+    public function carModels(): HasMany
     {
         return $this->hasMany(CarModel::class, 'car_make_id');
     }

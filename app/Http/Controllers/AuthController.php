@@ -83,6 +83,7 @@ class AuthController extends Controller
                     'phone'    => $data['phone'] ?? null,
                     'password' => Hash::make($data['password']),
                     'role'     => 'customer',
+                    'locale' => app()->getLocale(),
                 ]);
             });
 
@@ -141,7 +142,7 @@ class AuthController extends Controller
         );
 
         return $status === Password::RESET_LINK_SENT
-            ? back()->with('status', 'Ссылка для сброса пароля отправлена на ваш e-mail.')
+            ? back()->with('status', 'forgot_password_success_sent')
             : back()->withErrors(['email' => __($status)]);
     }
 
@@ -178,7 +179,7 @@ class AuthController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', 'Пароль успешно изменён. Войдите в аккаунт.')
+            ? redirect()->route('login')->with('status', 'password_change_success')
             : back()->withErrors(['email' => __($status)]);
     }
 

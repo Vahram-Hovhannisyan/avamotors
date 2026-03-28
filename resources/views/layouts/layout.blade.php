@@ -65,14 +65,14 @@
 
 <header>
     <div class="header-top">
-        ⚡ Автозапчасти — только оригинал и проверенные аналоги &nbsp;|&nbsp; Доставка по всей Армении
+        ⚡ {{ __('header.top_banner') }}
     </div>
     <div class="header-inner">
         <a href="{{ route('home') }}" class="logo">AVA<span>Motors</span></a>
 
         <form class="search-bar" action="{{ route('search') }}" method="GET">
-            <input type="text" name="q" value="{{ request('q') }}" placeholder="Поиск по артикулу, марке, модели...">
-            <button type="submit">Найти</button>
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ __('header.search_placeholder') }}">
+            <button type="submit">{{ __('header.search_btn') }}</button>
         </form>
 
         <div class="header-actions">
@@ -85,15 +85,25 @@
                             <rect x="3" y="14" width="7" height="7"/>
                             <rect x="14" y="14" width="7" height="7"/>
                         </svg>
-                        Админ
+                        {{ __('header.admin') }}
                     </a>
                 @endif
+
+                {{-- LANGUAGE SWITCHER В ШАПКЕ --}}
+                <div class="lang-switcher-header">
+                    <a href="{{ route('lang.switch', 'ru') }}"
+                       class="lang-link-header {{ app()->getLocale() === 'ru' ? 'active' : '' }}">RU</a>
+                    <span class="lang-divider-header">|</span>
+                    <a href="{{ route('lang.switch', 'hy') }}"
+                       class="lang-link-header {{ app()->getLocale() === 'hy' ? 'active' : '' }}">HY</a>
+                </div>
+
                 <div class="user-menu-wrap">
                     @if(!auth()->user()->hasVerifiedEmail())
-                        <span class="unverified-dot" title="E-mail не подтверждён"></span>
+                        <span class="unverified-dot" title="{{ __('header.email_unverified') }}"></span>
                     @endif
                     @if(!auth()->user()->city || !auth()->user()->address)
-                        <span class="delivery-dot" title="В профиле запольните адрес доставки"></span>
+                        <span class="delivery-dot" title="{{ __('header.delivery_address_required') }}"></span>
                     @endif
                     <button class="icon-btn" onclick="this.parentElement.classList.toggle('open')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -115,15 +125,18 @@
                             @if(auth()->user()->city || auth()->user()->address)
                                 {{ auth()->user()->city }}, {{auth()->user()->address}}
                             @else
-                                Введите адрес или город доставки <span class="delivery-unverified-badge">!</span>
+                                {{ __('header.enter_delivery_address') }} <span
+                                    class="delivery-unverified-badge">!</span>
                             @endif
                         </div>
                         <div class="user-dropdown-divider"></div>
-                        <a href="{{ route('account') }}" class="user-dropdown-link">Мой аккаунт</a>
-                        <a href="{{ route('orders.index') }}" class="user-dropdown-link">Мои заказы</a>
+                        <a href="{{ route('account') }}" class="user-dropdown-link">{{ __('header.my_account') }}</a>
+                        <a href="{{ route('orders.index') }}"
+                           class="user-dropdown-link">{{ __('header.my_orders') }}</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="user-dropdown-link user-dropdown-logout">Выйти</button>
+                            <button type="submit"
+                                    class="user-dropdown-link user-dropdown-logout">{{ __('header.logout') }}</button>
                         </form>
                     </div>
                 </div>
@@ -133,7 +146,7 @@
                         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
                         <circle cx="12" cy="7" r="4"/>
                     </svg>
-                    Войти
+                    {{ __('header.login') }}
                 </a>
                 <a href="{{ route('register') }}" class="icon-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -142,17 +155,25 @@
                         <line x1="19" y1="8" x2="19" y2="14"/>
                         <line x1="22" y1="11" x2="16" y2="11"/>
                     </svg>
-                    Регистрация
+                    {{ __('header.register') }}
                 </a>
-            @endauth
 
+                {{-- LANGUAGE SWITCHER ДЛЯ НЕАВТОРИЗОВАННЫХ --}}
+                <div class="lang-switcher-header">
+                    <a href="{{ route('lang.switch', 'ru') }}"
+                       class="lang-link-header {{ app()->getLocale() === 'ru' ? 'active' : '' }}">RU</a>
+                    <span class="lang-divider-header">|</span>
+                    <a href="{{ route('lang.switch', 'hy') }}"
+                       class="lang-link-header {{ app()->getLocale() === 'hy' ? 'active' : '' }}">HY</a>
+                </div>
+            @endauth
             <a href="{{ route('cart.index') }}" class="cart-btn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="9" cy="21" r="1"/>
                     <circle cx="20" cy="21" r="1"/>
                     <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
                 </svg>
-                Корзина
+                {{ __('header.cart') }}
                 <span class="cart-badge" id="cart-badge" style="display: none;">0</span>
             </a>
         </div>
@@ -161,14 +182,14 @@
 
 <nav class="navbar">
     <div class="navbar-inner">
-        <a href="{{ route('home') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Главная</a>
-        <a href="{{ route('catalog') }}" class="nav-link">Каталог</a>
+        <a href="{{ route('home') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">{{ __('nav.home') }}</a>
+        <a href="{{ route('catalog') }}" class="nav-link">{{ __('nav.catalog') }}</a>
         <button class="nav-link" id="mega-btn" onclick="toggleMega()" aria-expanded="false">
-            Категории <span class="nav-arrow">▼</span>
+            {{ __('nav.categories') }} <span class="nav-arrow">▼</span>
         </button>
         <a href="{{ route('catalog') }}?brands=1"
-           class="nav-link {{ request()->is('brands*') ? 'active' : '' }}">Бренды</a>
-        <a href="/about" class="nav-link {{ request()->is('about*') ? 'active' : '' }}">О нас</a>
+           class="nav-link {{ request()->is('brands*') ? 'active' : '' }}">{{ __('nav.brands') }}</a>
+        <a href="/about" class="nav-link {{ request()->is('about*') ? 'active' : '' }}">{{ __('nav.about') }}</a>
     </div>
 
     <div class="mega-menu" id="mega-menu">
@@ -179,18 +200,18 @@
                         <div style="margin-bottom:1.4rem;">
                             <a href="{{ route('catalog.category', $cat->slug) }}" class="mega-col-title"
                                onclick="closeMega()">
-                                {{ $cat->name }}
+                                {{ __("categories.{$cat->slug}") }}
                             </a>
                             @if($cat->children->isNotEmpty())
                                 @foreach($cat->children->sortBy('sort_order') as $child)
                                     <a href="{{ route('catalog.category', $child->slug) }}" class="mega-link"
                                        onclick="closeMega()">
-                                        {{ $child->name }}
+                                        {{ __("categories.{$child->slug}") }}
                                     </a>
                                 @endforeach
                             @else
                                 <a href="{{ route('catalog.category', $cat->slug) }}" class="mega-link"
-                                   onclick="closeMega()">Все товары</a>
+                                   onclick="closeMega()">{{ __('nav.all_products') }}</a>
                             @endif
                         </div>
                     @endforeach
@@ -199,10 +220,11 @@
         </div>
         <div class="mega-footer">
             <span style="font-size:0.78rem; color:var(--muted);">
-                {{ $navCategories->count() }} категорий &nbsp;·&nbsp;
-                {{ $navCategories->sum(fn($c) => $c->children->count()) }} подкатегорий
+                {{ $navCategories->count() }} {{ __('nav.categories') }} &nbsp;·&nbsp;
+                {{ $navCategories->sum(fn($c) => $c->children->count()) }} {{ __('nav.subcategories') }}
             </span>
-            <a href="{{ route('catalog') }}" class="mega-footer-link" onclick="closeMega()">Весь каталог →</a>
+            <a href="{{ route('catalog') }}" class="mega-footer-link"
+               onclick="closeMega()">{{ __('nav.full_catalog') }} →</a>
         </div>
     </div>
 </nav>
@@ -215,31 +237,31 @@
     <div class="footer-grid">
         <div class="footer-brand">
             <a href="{{ route('home') }}" class="logo">AVA<span>Motors</span></a>
-            <p>Автозапчасти для любых марок автомобилей. Оригинал и качественные аналоги с гарантией.</p>
+            <p>{{ __('footer.description') }}</p>
         </div>
         <div class="footer-col">
-            <h4>Каталог</h4>
+            <h4>{{ __('footer.catalog') }}</h4>
             @foreach($navCategories as $cat)
-                <a href="{{ route('catalog.category', $cat->slug) }}">{{ $cat->name }}</a>
+                <a href="{{ route('catalog.category', $cat->slug) }}">{{ __("categories.{$cat->slug}") }}</a>
             @endforeach
         </div>
         <div class="footer-col">
-            <h4>Покупателям</h4>
-            <a href="/delivery">Доставка и оплата</a>
-            <a href="/returns">Возврат товара</a>
-            <a href="/warranty">Гарантия</a>
-            <a href="/faq">Вопросы и ответы</a>
+            <h4>{{ __('footer.for_customers') }}</h4>
+            <a href="/delivery">{{ __('footer.delivery_payment') }}</a>
+            <a href="/returns">{{ __('footer.returns') }}</a>
+            <a href="/warranty">{{ __('footer.warranty') }}</a>
+            <a href="/faq">{{ __('footer.faq') }}</a>
         </div>
         <div class="footer-col">
-            <h4>Контакты</h4>
-            <a href="tel:+37400000000">+374 (98) 42-88-31</a>
-            <a href="mailto:info@avamotors.am">alik.avamotors@gmail.com</a>
-            <a href="/about">О компании</a>
+            <h4>{{ __('footer.contacts') }}</h4>
+            <a href="tel:+37498428831">+374 (98) 42-88-31</a>
+            <a href="mailto:alik.avamotors@gmail.com">alik.avamotors@gmail.com</a>
+            <a href="/about">{{ __('footer.about_company') }}</a>
         </div>
     </div>
     <div class="footer-bottom">
-        <span>© {{ date('Y') }} AVAMotors. Все права защищены.</span>
-        <span>Раздан, Армения</span>
+        <span>© {{ date('Y') }} AVAMotors. {{ __('footer.all_rights') }}</span>
+        <span>{{ __('footer.location') }}</span>
     </div>
 </footer>
 
@@ -252,7 +274,7 @@
 {{-- Глобальная инициализация --}}
 <script>
     // Ждем загрузки всех скриптов
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Добавляем CSRF токен во все формы
         const token = document.querySelector('meta[name="csrf-token"]');
         if (token) {

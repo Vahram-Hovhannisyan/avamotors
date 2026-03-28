@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Войти — AVAMotors')
+@section('title', __('auth.login.title') . ' — AVAMotors')
 
 @push('styles')
     @vite(['resources/css/auth.css'])
@@ -10,8 +10,8 @@
 
     <div class="auth-wrap">
         <div class="auth-box">
-            <h1 class="auth-title">Вход</h1>
-            <p class="auth-sub">Нет аккаунта? <a href="{{ route('register') }}">Зарегистрироваться</a></p>
+            <h1 class="auth-title">{{ __('auth.login.title') }}</h1>
+            <p class="auth-sub">{{ __('auth.login.no_account') }} <a href="{{ route('register') }}">{{ __('auth.login.register') }}</a></p>
 
             @if(session('status'))
                 <div class="flash-success">✓ {{ session('status') }}</div>
@@ -25,7 +25,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="email">E-mail</label>
+                    <label for="email">{{ __('auth.login.email') }}</label>
                     <input type="email" id="email" name="email"
                            value="{{ old('email') }}"
                            placeholder="you@example.com"
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Пароль</label>
+                    <label for="password">{{ __('auth.login.password') }}</label>
                     <input type="password" id="password" name="password"
                            placeholder="••••••••"
                            required>
@@ -43,16 +43,16 @@
                 <div class="login-row">
                     <label class="form-check">
                         <input type="checkbox" name="remember">
-                        Запомнить меня
+                        {{ __('auth.login.remember_me') }}
                     </label>
-                    <a href="{{ route('password.request') }}" class="form-link">Забыли пароль?</a>
+                    <a href="{{ route('password.request') }}" class="form-link">{{ __('auth.login.forgot_password') }}</a>
                 </div>
 
-                <button type="submit" class="submit-btn">Войти</button>
+                <button type="submit" class="submit-btn">{{ __('auth.login.submit') }}</button>
             </form>
 
             <p class="register-link">
-                Ещё не зарегистрированы? <a href="{{ route('register') }}">Создать аккаунт</a>
+                {{ __('auth.login.no_account') }} <a href="{{ route('register') }}">{{ __('auth.login.register') }}</a>
             </p>
         </div>
     </div>

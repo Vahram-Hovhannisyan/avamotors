@@ -28,7 +28,7 @@ class CheckoutRequest extends FormRequest
             'name.required'  => 'Укажите ваше имя.',
             'phone.required' => 'Укажите номер телефона.',
             'email.required' => 'Укажите эл. почту.',
-//            'emails.emails'    => 'Введите корректный emails.',
+//            'emails.php.emails.php'    => 'Введите корректный emails.php.',
         ];
     }
 }

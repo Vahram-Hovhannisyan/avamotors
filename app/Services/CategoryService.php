@@ -73,7 +73,7 @@ class CategoryService implements CategoryServiceInterface
     }
 
     /**
-     * Clear nav cache — call after any category change.
+     * Clear nav.php cache — call after any category change.
      */
     public function clearCache(): void
     {

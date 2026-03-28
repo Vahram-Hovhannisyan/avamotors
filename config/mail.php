@@ -7,7 +7,7 @@ return [
     | Default Mailer
     |--------------------------------------------------------------------------
     |
-    | This option controls the default mailer that is used to send all emails
+    | This option controls the default mailer that is used to send all emails.php
     | messages unless another mailer is explicitly specified when sending
     | the message. All additional mailers can be configured within the
     | "mailers" array. Examples of each type of mailer are provided.
@@ -26,7 +26,7 @@ return [
     | you and you are free to add your own as your application requires.
     |
     | Laravel supports a variety of mail "transport" drivers that can be used
-    | when delivering an emails. You may specify which one you're using for
+    | when delivering an emails.php. You may specify which one you're using for
     | your mailers below. You may also add additional mailers if needed.
     |
     | Supported: "smtp", "sendmail", "mailgun", "ses", "ses-v2",
@@ -104,9 +104,9 @@ return [
     | Global "From" Address
     |--------------------------------------------------------------------------
     |
-    | You may wish for all emails sent by your application to be sent from
+    | You may wish for all emails.php sent by your application to be sent from
     | the same address. Here you may specify a name and address that is
-    | used globally for all emails that are sent by your application.
+    | used globally for all emails.php that are sent by your application.
     |
     */
 
